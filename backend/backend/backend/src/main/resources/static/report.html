@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Issue | RailSafe</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <span>Rail</span>Safe
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="report.html" class="active">
+                Report Issue
+            </a>
+
+            <a href="track.html">
+                Track Issue
+            </a>
+
+            <a href="login.html">
+                Employee Login
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ================= PAGE HEADER ================= -->
+
+    <main class="report-page">
+
+        <div class="page-header">
+
+            <p class="section-label">
+                MAINTENANCE REQUEST
+            </p>
+
+            <h1>
+                Report Railway Issue
+            </h1>
+
+            <p>
+                Provide accurate information about the railway
+                infrastructure issue to help the maintenance
+                team respond quickly.
+            </p>
+
+        </div>
+
+
+
+        <!-- ================= REPORT FORM ================= -->
+
+        <div class="report-card">
+
+            <form id="reportForm">
+
+
+                <!-- LOCATION SECTION -->
+
+                <div class="form-section">
+
+                    <div class="section-title">
+
+                        <span>01</span>
+
+                        <div>
+
+                            <h2>
+                                Issue Location
+                            </h2>
+
+                            <p>
+                                Tell us where the issue has been identified.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label for="station">
+                                Station Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="station"
+                                placeholder="e.g. Dadar Railway Station"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label for="platform">
+                                Platform Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="platform"
+                                placeholder="e.g. Platform 3"
+                                required
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- INFRASTRUCTURE SECTION -->
+
+                <div class="form-section">
+
+                    <div class="section-title">
+
+                        <span>02</span>
+
+                        <div>
+
+                            <h2>
+                                Infrastructure Details
+                            </h2>
+
+                            <p>
+                                Select the facility or infrastructure affected.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="infrastructure">
+                            Infrastructure Type
+                        </label>
+
+                        <select
+                            id="infrastructure"
+                            required
+                        >
+
+                            <option value="">
+                                Select infrastructure type
+                            </option>
+
+                            <option>
+                                Lighting
+                            </option>
+
+                            <option>
+                                Escalator
+                            </option>
+
+                            <option>
+                                Lift
+                            </option>
+
+                            <option>
+                                Platform
+                            </option>
+
+                            <option>
+                                Toilet
+                            </option>
+
+                            <option>
+                                Water Facility
+                            </option>
+
+                            <option>
+                                Signboard
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DESCRIPTION SECTION -->
+
+                <div class="form-section">
+
+                    <div class="section-title">
+
+                        <span>03</span>
+
+                        <div>
+
+                            <h2>
+                                Issue Description
+                            </h2>
+
+                            <p>
+                                Describe the problem clearly.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="description">
+                            Description
+                        </label>
+
+                        <textarea
+                            id="description"
+                            rows="6"
+                            placeholder="Describe what happened, where exactly the problem is located, and any other important information..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PHOTO SECTION -->
+
+                <div class="form-section">
+
+                    <div class="section-title">
+
+                        <span>04</span>
+
+                        <div>
+
+                            <h2>
+                                Issue Evidence
+                            </h2>
+
+                            <p>
+                                Add one photo of the reported issue.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="photo-upload-box">
+
+                        <div class="photo-icon">
+                            📷
+                        </div>
+
+                        <h3>
+                            Add Issue Photo
+                        </h3>
+
+                        <p>
+                            Take a photo using your camera
+                            or select one from your gallery.
+                        </p>
+
+
+                        <div class="photo-buttons">
+
+                            <!-- CAMERA -->
+
+                            <button
+                                type="button"
+                                class="photo-button"
+                                onclick="document.getElementById('issuePhotoCamera').click()"
+                            >
+                                📷 Open Camera
+                            </button>
+
+
+                            <!-- GALLERY -->
+
+                            <button
+                                type="button"
+                                class="photo-button"
+                                onclick="document.getElementById('issuePhotoGallery').click()"
+                            >
+                                🖼️ Upload from Gallery
+                            </button>
+
+                        </div>
+
+
+                        <!-- CAMERA INPUT -->
+
+                        <input
+                            type="file"
+                            id="issuePhotoCamera"
+                            accept="image/*"
+                            capture="environment"
+                            hidden
+                        >
+
+
+                        <!-- GALLERY INPUT -->
+
+                        <input
+                            type="file"
+                            id="issuePhotoGallery"
+                            accept="image/*"
+                            hidden
+                        >
+
+
+                        <p
+                            id="photoName"
+                            class="photo-name"
+                        >
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SUBMIT SECTION -->
+
+                <div class="submit-section">
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                    >
+                        Submit Issue Report
+                    </button>
+
+                    <p id="reportMessage"></p>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>
+            RailSafe
+        </strong>
+
+        <p>
+            Railway Maintenance Management System
+        </p>
+
+        <p>
+            © 2026 RailSafe. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

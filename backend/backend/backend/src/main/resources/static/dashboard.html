@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Officer Dashboard | RailSafe</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <span>Rail</span>Safe
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="report.html">
+                Report Issue
+            </a>
+
+            <a href="track.html">
+                Track Issue
+            </a>
+
+            <a href="dashboard.html" class="active">
+                Officer Dashboard
+            </a>
+
+            <a href="login.html">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- ================= DASHBOARD ================= -->
+
+    <main class="dashboard-page">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <p class="section-label">
+                    MAINTENANCE CONTROL CENTRE
+                </p>
+
+                <h1>
+                    Officer Dashboard
+                </h1>
+
+                <p>
+                    Monitor reported infrastructure issues, assign
+                    maintenance work and verify repair evidence.
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-date">
+
+                <span>
+                    SYSTEM STATUS
+                </span>
+
+                <strong>
+                    ● Operational
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================= SUMMARY CARDS ================= -->
+
+        <div class="dashboard-cards">
+
+
+            <div class="card">
+
+                <span class="card-label">
+                    TOTAL ISSUES
+                </span>
+
+                <h2>
+                    156
+                </h2>
+
+                <p>
+                    Reported infrastructure issues
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <span class="card-label">
+                    REQUIRES ACTION
+                </span>
+
+                <h2>
+                    41
+                </h2>
+
+                <p>
+                    Issues awaiting assignment
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <span class="card-label">
+                    UNDER MAINTENANCE
+                </span>
+
+                <h2>
+                    27
+                </h2>
+
+                <p>
+                    Repair work currently active
+                </p>
+
+            </div>
+
+
+
+            <div class="card">
+
+                <span class="card-label">
+                    RESOLVED
+                </span>
+
+                <h2>
+                    72
+                </h2>
+
+                <p>
+                    Issues successfully resolved
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ================= ISSUE MANAGEMENT ================= -->
+
+        <section class="dashboard-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        ISSUE MANAGEMENT
+                    </p>
+
+                    <h2>
+                        Recent Maintenance Reports
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="track-button"
+                >
+                    View All Issues
+                </button>
+
+            </div>
+
+
+
+            <!-- ISSUE TABLE -->
+
+            <div class="issue-table-container">
+
+                <table class="issue-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Report ID
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Issue
+                            </th>
+
+                            <th>
+                                Priority
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <!-- ISSUE 1 -->
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    RR-1001
+                                </strong>
+                            </td>
+
+                            <td>
+                                Dadar<br>
+                                <small>
+                                    Platform 3
+                                </small>
+                            </td>
+
+                            <td>
+                                Damaged Platform Surface
+                            </td>
+
+                            <td>
+
+                                <span class="priority-badge critical">
+                                    Critical
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+                                    Under Maintenance
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="issue-details.html?id=RR-1001"
+                                    class="view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- ISSUE 2 -->
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    RR-1002
+                                </strong>
+                            </td>
+
+                            <td>
+                                Parel<br>
+                                <small>
+                                    Platform 2
+                                </small>
+                            </td>
+
+                            <td>
+                                Damaged Safety Barrier
+                            </td>
+
+                            <td>
+
+                                <span class="priority-badge high">
+                                    High
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+                                    Assigned
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="issue-details.html?id=RR-1002"
+                                    class="view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- ISSUE 3 -->
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    RR-1003
+                                </strong>
+                            </td>
+
+                            <td>
+                                Kurla<br>
+                                <small>
+                                    Platform 1
+                                </small>
+                            </td>
+
+                            <td>
+                                Lighting Failure
+                            </td>
+
+                            <td>
+
+                                <span class="priority-badge medium">
+                                    Medium
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+                                    Inspection
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="issue-details.html?id=RR-1003"
+                                    class="view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+
+                        <!-- ISSUE 4 -->
+
+                        <tr>
+
+                            <td>
+                                <strong>
+                                    RR-1004
+                                </strong>
+                            </td>
+
+                            <td>
+                                Thane<br>
+                                <small>
+                                    Platform 5
+                                </small>
+                            </td>
+
+                            <td>
+                                Water Leakage
+                            </td>
+
+                            <td>
+
+                                <span class="priority-badge high">
+                                    High
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+                                    Resolved
+                                </span>
+
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="issue-details.html?id=RR-1004"
+                                    class="view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MAINTENANCE WORKFLOW ================= -->
+
+        <section class="dashboard-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        MAINTENANCE WORKFLOW
+                    </p>
+
+                    <h2>
+                        Issue Verification Process
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="workflow-grid">
+
+
+                <div class="workflow-card">
+
+                    <span class="workflow-number">
+                        01
+                    </span>
+
+                    <h3>
+                        Reported
+                    </h3>
+
+                    <p>
+                        Employee submits an issue with location
+                        and evidence photograph.
+                    </p>
+
+                </div>
+
+
+
+                <div class="workflow-card">
+
+                    <span class="workflow-number">
+                        02
+                    </span>
+
+                    <h3>
+                        Assigned
+                    </h3>
+
+                    <p>
+                        Officer assigns the issue to the responsible
+                        maintenance team.
+                    </p>
+
+                </div>
+
+
+
+                <div class="workflow-card">
+
+                    <span class="workflow-number">
+                        03
+                    </span>
+
+                    <h3>
+                        Maintenance
+                    </h3>
+
+                    <p>
+                        Maintenance team inspects and repairs
+                        the reported infrastructure.
+                    </p>
+
+                </div>
+
+
+
+                <div class="workflow-card">
+
+                    <span class="workflow-number">
+                        04
+                    </span>
+
+                    <h3>
+                        Evidence Verification
+                    </h3>
+
+                    <p>
+                        Before and After evidence is checked
+                        before the issue is marked resolved.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= VERIFICATION ALERT ================= -->
+
+        <section class="verification-alert">
+
+            <div>
+
+                <p class="section-label">
+                    ACTION REQUIRED
+                </p>
+
+                <h2>
+                    Maintenance Evidence Verification
+                </h2>
+
+                <p>
+                    Issues should not be marked as resolved only by
+                    changing their status. The responsible officer
+                    must review the maintenance evidence before closure.
+                </p>
+
+            </div>
+
+
+            <a
+                href="issue-details.html?id=RR-1001"
+                class="track-button"
+            >
+                Review Evidence
+            </a>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>
+            RailSafe
+        </strong>
+
+        <p>
+            Railway Maintenance Management System
+        </p>
+
+        <p>
+            © 2026 RailSafe. All Rights Reserved.
+        </p>
+
+    </footer>
+
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

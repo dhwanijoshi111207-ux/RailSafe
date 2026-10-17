@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Issue Details | RailSafe</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <span>Rail</span>Safe
+        </div>
+
+        <div class="nav-links">
+
+            <a href="index.html">Home</a>
+
+            <a href="report.html">Report Issue</a>
+
+            <a href="track.html">Track Issue</a>
+
+            <a href="dashboard.html">Officer Dashboard</a>
+
+            <a href="login.html">Logout</a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ISSUE DETAILS -->
+
+    <main class="issue-details-page">
+
+
+        <!-- HEADER -->
+
+        <div class="page-header">
+
+            <p class="hero-label">
+                MAINTENANCE CONTROL
+            </p>
+
+            <h1>
+                Issue Details
+            </h1>
+
+            <p>
+                Review maintenance activity, evidence and verification status.
+            </p>
+
+        </div>
+
+
+        <!-- ISSUE SUMMARY -->
+
+        <section class="issue-detail-card">
+
+            <div class="issue-detail-header">
+
+                <div>
+
+                    <p class="card-label">
+                        REPORT ID
+                    </p>
+
+                    <h2 id="detailReportId">
+                        Loading...
+                    </h2>
+
+                </div>
+
+                <span class="priority-badge medium" id="detailPriority">
+                    Medium
+                </span>
+
+            </div>
+
+
+            <div class="profile-grid">
+
+                <div class="profile-field">
+
+                    <span>
+                        Station
+                    </span>
+
+                    <strong id="detailStation">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span>
+                        Platform
+                    </span>
+
+                    <strong id="detailPlatform">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span>
+                        Infrastructure
+                    </span>
+
+                    <strong id="detailIssueType">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-field">
+
+                    <span>
+                        Current Status
+                    </span>
+
+                    <strong id="detailStatus">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORTED ISSUE -->
+
+        <section class="issue-detail-card">
+
+            <div class="section-heading">
+
+                <p class="hero-label">
+                    ISSUE INFORMATION
+                </p>
+
+                <h2>
+                    Reported Issue
+                </h2>
+
+            </div>
+
+
+            <div class="evidence-info">
+
+                <div class="evidence-item">
+
+                    <span>
+                        Issue
+                    </span>
+
+                    <strong id="detailReportedIssue">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="evidence-item">
+
+                    <span>
+                        Reported Location
+                    </span>
+
+                    <strong id="detailLocation">
+                        Loading...
+                    </strong>
+
+                </div>
+
+
+                <div class="evidence-item">
+
+                    <span>
+                        Report Status
+                    </span>
+
+                    <strong id="detailReportStatus">
+                        Loading...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ASSIGNMENT -->
+
+        <section class="issue-detail-card">
+
+            <div class="section-heading">
+
+                <p class="hero-label">
+                    MAINTENANCE WORKFLOW
+                </p>
+
+                <h2>
+                    Maintenance Assignment
+                </h2>
+
+            </div>
+
+
+            <div class="evidence-info">
+
+                <div class="evidence-item">
+
+                    <span>
+                        Assigned Team
+                    </span>
+
+                    <strong>
+                        Not Assigned
+                    </strong>
+
+                </div>
+
+
+                <div class="evidence-item">
+
+                    <span>
+                        Responsible Officer
+                    </span>
+
+                    <strong>
+                        Awaiting Assignment
+                    </strong>
+
+                </div>
+
+
+                <div class="evidence-item">
+
+                    <span>
+                        Assignment Status
+                    </span>
+
+                    <strong>
+                        Not Assigned
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- EVIDENCE VERIFICATION -->
+
+        <section class="issue-detail-card">
+
+            <div class="section-heading">
+
+                <p class="hero-label">
+                    EVIDENCE VERIFICATION
+                </p>
+
+                <h2>
+                    Maintenance Evidence
+                </h2>
+
+            </div>
+
+
+            <div class="verification-grid">
+
+
+                <div class="verification-box">
+
+                    <span class="card-label">
+                        BEFORE EVIDENCE
+                    </span>
+
+                    <h3>
+                        ⏳ Awaiting Upload
+                    </h3>
+
+                    <p>
+                        Evidence will be available after the employee
+                        submits the issue photograph.
+                    </p>
+
+                </div>
+
+
+                <div class="verification-box">
+
+                    <span class="card-label">
+                        AFTER EVIDENCE
+                    </span>
+
+                    <h3>
+                        ⏳ Awaiting Upload
+                    </h3>
+
+                    <p>
+                        Maintenance team must upload repair evidence.
+                    </p>
+
+                </div>
+
+
+                <div class="verification-box">
+
+                    <span class="card-label">
+                        CV ANALYSIS
+                    </span>
+
+                    <h3>
+                        ⏳ Awaiting Evidence
+                    </h3>
+
+                    <p>
+                        Computer vision comparison will run after
+                        the After photograph is uploaded.
+                    </p>
+
+                </div>
+
+
+                <div class="verification-box">
+
+                    <span class="card-label">
+                        OFFICER VERIFICATION
+                    </span>
+
+                    <h3>
+                        ⏳ Pending
+                    </h3>
+
+                    <p>
+                        Final verification is required before closure.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STATUS MANAGEMENT -->
+
+        <section class="issue-detail-card">
+
+            <div class="section-heading">
+
+                <p class="hero-label">
+                    OFFICER ACTION
+                </p>
+
+                <h2>
+                    Status Management
+                </h2>
+
+            </div>
+
+
+            <div class="status-update">
+
+                <label for="issueStatus">
+                    Update Issue Status
+                </label>
+
+
+                <select id="issueStatus">
+
+                    <option value="Reported">
+                        Reported
+                    </option>
+
+                    <option value="Assigned">
+                        Assigned
+                    </option>
+
+                    <option value="Inspection">
+                        Inspection
+                    </option>
+
+                    <option value="Under Maintenance">
+                        Under Maintenance
+                    </option>
+
+                    <option value="Resolved">
+                        Resolved
+                    </option>
+
+                    <option value="Closed">
+                        Closed
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="button"
+                    class="primary-button"
+                    id="updateStatusButton"
+                >
+                    Update Status
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- WARNING -->
+
+        <section class="verification-alert">
+
+            <div class="notice-icon">
+                !
+            </div>
+
+            <div>
+
+                <h3>
+                    Do not close without evidence
+                </h3>
+
+                <p>
+                    An issue should only be marked as Resolved or Closed
+                    after maintenance work is completed, After evidence
+                    is uploaded and the officer verifies the result.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-logo">
+            RailSafe
+        </div>
+
+        <p>
+            Railway Maintenance Management System
+        </p>
+
+        <p>
+            © 2026 RailSafe. Maintenance Operations Portal.
+        </p>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
