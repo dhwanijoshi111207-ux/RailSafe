@@ -20,7 +20,6 @@ def home():
 @app.route("/compare", methods=["POST"])
 def compare_images():
     try:
-        # Check that both photos were uploaded
         if "before" not in request.files or "after" not in request.files:
             return jsonify({
                 "error": "Please upload both before and after photos."
@@ -34,7 +33,6 @@ def compare_images():
                 "error": "Both image files must have filenames."
             }), 400
 
-        # Read uploaded images
         before_bytes = np.frombuffer(
             before_file.read(), dtype=np.uint8
         )
@@ -42,14 +40,9 @@ def compare_images():
             after_file.read(), dtype=np.uint8
         )
 
-        before = cv2.imdecode(
-            before_bytes, cv2.IMREAD_COLOR
-        )
-        after = cv2.imdecode(
-            after_bytes, cv2.IMREAD_COLOR
-        )
+        before = cv2.imdecode(before_bytes, cv2.IMREAD_COLOR)
+        after = cv2.imdecode(after_bytes, cv2.IMREAD_COLOR)
 
-        # Validate images
         if before is None or after is None:
             return jsonify({
                 "error": "Invalid image file. Please upload valid photos."
@@ -63,22 +56,17 @@ def compare_images():
 
         # Calculate visual difference
         difference = cv2.absdiff(before, after)
-        gray = cv2.cvtColor(
-            difference, cv2.COLOR_BGR2GRAY
-        )
+        gray = cv2.cvtColor(difference, cv2.COLOR_BGR2GRAY)
 
         _, threshold_image = cv2.threshold(
             gray, 30, 255, cv2.THRESH_BINARY
         )
 
-        changed_pixels = cv2.countNonZero(
-            threshold_image
-        )
-
+        changed_pixels = cv2.countNonZero(threshold_image)
         total_pixels = gray.shape[0] * gray.shape[1]
 
         change_percent = round(
-            (changed_pixels / total_pixels) * 100, 2
+            changed_pixels / total_pixels * 100, 2
         )
 
         return jsonify({
@@ -91,10 +79,10 @@ def compare_images():
             )
         }), 200
 
-    except Exception as error:
+    except Exception:
         app.logger.exception("Photo comparison failed")
         return jsonify({
-            "error": "Photo comparison failed. Please try again."
+            "error": "Photo comparison failed. Check the CV service logs."
         }), 500
 
 
@@ -105,6 +93,14 @@ def file_too_large(error):
     }), 413
 
 
+@app.errorhandler(500)
+def internal_server_error(error):
+    app.logger.exception("Internal server error")
+    return jsonify({
+        "error": "Internal server error in the CV service."
+    }), 500
+
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(
@@ -112,4 +108,3 @@ if __name__ == "__main__":
         port=port,
         debug=False
     )
-
