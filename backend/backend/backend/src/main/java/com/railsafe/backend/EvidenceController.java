@@ -4,12 +4,14 @@ package com.railsafe.backend;
 import com.railsafe.backend.model.Evidence;
 import com.railsafe.backend.repository.EvidenceRepository;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -23,6 +25,9 @@ public class EvidenceController {
 
     private final EvidenceRepository repository;
 
+    @Value("${CV_SERVICE_URL:https://railsafe.onrender.com}")
+    private String cvServiceUrl;
+
     public EvidenceController(EvidenceRepository repository) {
         this.repository = repository;
     }
@@ -34,14 +39,17 @@ public class EvidenceController {
             @RequestParam(required = false) MultipartFile afterPhoto)
             throws IOException {
 
-        Path uploadPath =
-                Paths.get("src/main/resources/static/uploads");
+        Path uploadPath = Paths.get(
+                System.getProperty("java.io.tmpdir"),
+                "railsafe-uploads"
+        );
 
         Files.createDirectories(uploadPath);
 
         Evidence evidence = repository.findAll()
                 .stream()
-                .filter(e -> e.getReportId().equals(reportId))
+                .filter(e -> e.getReportId() != null
+                        && e.getReportId().equals(reportId))
                 .findFirst()
                 .orElse(new Evidence());
 
@@ -49,7 +57,11 @@ public class EvidenceController {
 
         if (beforePhoto != null && !beforePhoto.isEmpty()) {
             String fileName = "RR-" + reportId
-                    + "-before-" + beforePhoto.getOriginalFilename();
+                    + "-before-" + Paths.get(
+                            beforePhoto.getOriginalFilename() == null
+                                    ? "before.jpg"
+                                    : beforePhoto.getOriginalFilename()
+                    ).getFileName();
 
             Files.copy(
                     beforePhoto.getInputStream(),
@@ -62,7 +74,11 @@ public class EvidenceController {
 
         if (afterPhoto != null && !afterPhoto.isEmpty()) {
             String fileName = "RR-" + reportId
-                    + "-after-" + afterPhoto.getOriginalFilename();
+                    + "-after-" + Paths.get(
+                            afterPhoto.getOriginalFilename() == null
+                                    ? "after.jpg"
+                                    : afterPhoto.getOriginalFilename()
+                    ).getFileName();
 
             Files.copy(
                     afterPhoto.getInputStream(),
@@ -84,6 +100,12 @@ public class EvidenceController {
             @RequestParam("beforePhoto") MultipartFile beforePhoto,
             @RequestParam("afterPhoto") MultipartFile afterPhoto)
             throws IOException {
+
+        if (beforePhoto.isEmpty() || afterPhoto.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Please upload both before and after photos."
+            );
+        }
 
         MultiValueMap<String, Object> body =
                 new LinkedMultiValueMap<>();
@@ -108,22 +130,32 @@ public class EvidenceController {
             }
         });
 
-        return RestClient.create()
-                .post()
-                .uri("http://127.0.0.1:5000/compare")
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(body)
-                .retrieve()
-                .body(Object.class);
+        String baseUrl = cvServiceUrl.replaceAll("/+$", "");
+
+        try {
+            return RestClient.create()
+                    .post()
+                    .uri(baseUrl + "/compare")
+                    .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .body(body)
+                    .retrieve()
+                    .body(Object.class);
+
+        } catch (RestClientException ex) {
+            throw new RuntimeException(
+                    "CV comparison service request failed: "
+                            + ex.getMessage(),
+                    ex
+            );
+        }
     }
 
     @GetMapping("/{reportId}")
-    public Evidence getEvidence(
-            @PathVariable Integer reportId) {
-
+    public Evidence getEvidence(@PathVariable Integer reportId) {
         return repository.findAll()
                 .stream()
-                .filter(e -> e.getReportId().equals(reportId))
+                .filter(e -> e.getReportId() != null
+                        && e.getReportId().equals(reportId))
                 .findFirst()
                 .orElse(null);
     }
