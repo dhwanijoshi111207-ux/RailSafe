@@ -53,7 +53,6 @@
 
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="logo"><span>Rail</span>Safe</div>
 
@@ -76,7 +75,6 @@
             </p>
         </div>
 
-        <!-- SEARCH -->
         <div class="track-search-card">
             <form id="trackForm">
                 <label for="reportId">Report ID</label>
@@ -96,7 +94,6 @@
             </form>
         </div>
 
-        <!-- ISSUE RESULT -->
         <div id="trackResult" class="track-result" hidden>
 
             <div class="issue-overview">
@@ -110,7 +107,6 @@
                 </span>
             </div>
 
-            <!-- INFORMATION -->
             <div class="issue-information">
                 <div class="info-card">
                     <span>Report ID</span>
@@ -133,14 +129,12 @@
                 </div>
             </div>
 
-            <!-- ISSUE DETAILS -->
             <div class="details-card">
                 <p class="section-label">REPORTED ISSUE</p>
                 <h2 id="trackIssueHeading">Issue</h2>
                 <p id="trackDescription">-</p>
             </div>
 
-            <!-- EVIDENCE ANALYSIS -->
             <div class="details-card">
                 <p class="section-label">EVIDENCE ANALYSIS</p>
                 <h2>Issue Evidence</h2>
@@ -172,7 +166,6 @@
                 </div>
             </div>
 
-            <!-- TIMELINE -->
             <div class="status-section">
                 <h2>Maintenance Progress</h2>
 
@@ -219,7 +212,6 @@
                 </div>
             </div>
 
-            <!-- BEFORE AND AFTER PHOTOS -->
             <div class="photo-section">
                 <div class="section-heading">
                     <p class="section-label">MAINTENANCE EVIDENCE</p>
@@ -232,7 +224,6 @@
 
                 <div class="photo-grid">
 
-                    <!-- BEFORE PHOTO -->
                     <div class="photo-card">
                         <div class="photo-card-header">
                             <div>
@@ -245,9 +236,10 @@
                         </div>
 
                         <div class="photo-upload-area">
-                            <div class="photo-placeholder" id="beforePhotoDisplay">
-                                📷
-                            </div>
+                            <div
+                                class="photo-placeholder"
+                                id="beforePhotoDisplay"
+                            >📷</div>
 
                             <p>Original Issue Evidence</p>
                             <small>Evidence captured before maintenance.</small>
@@ -257,17 +249,13 @@
                                     type="button"
                                     class="photo-button"
                                     id="beforeCameraButton"
-                                >
-                                    📷 Open Camera
-                                </button>
+                                >📷 Open Camera</button>
 
                                 <button
                                     type="button"
                                     class="photo-button"
                                     id="beforeGalleryButton"
-                                >
-                                    🖼️ Upload from Gallery
-                                </button>
+                                >🖼️ Upload from Gallery</button>
                             </div>
 
                             <input
@@ -287,7 +275,6 @@
                         </div>
                     </div>
 
-                    <!-- AFTER PHOTO -->
                     <div class="photo-card">
                         <div class="photo-card-header">
                             <div>
@@ -300,9 +287,10 @@
                         </div>
 
                         <div class="photo-upload-area">
-                            <div class="photo-placeholder" id="afterPhotoDisplay">
-                                🛠️
-                            </div>
+                            <div
+                                class="photo-placeholder"
+                                id="afterPhotoDisplay"
+                            >🛠️</div>
 
                             <p>Repair Evidence</p>
                             <small>Evidence captured after maintenance.</small>
@@ -312,17 +300,13 @@
                                     type="button"
                                     class="photo-button"
                                     id="afterCameraButton"
-                                >
-                                    📷 Open Camera
-                                </button>
+                                >📷 Open Camera</button>
 
                                 <button
                                     type="button"
                                     class="photo-button"
                                     id="afterGalleryButton"
-                                >
-                                    🖼️ Upload from Gallery
-                                </button>
+                                >🖼️ Upload from Gallery</button>
                             </div>
 
                             <input
@@ -341,10 +325,10 @@
                             >
                         </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- CV COMPARISON -->
             <div class="details-card">
                 <p class="section-label">CV ANALYSIS</p>
                 <h2>Compare Maintenance Photos</h2>
@@ -358,18 +342,14 @@
                     type="button"
                     class="track-button compare-button"
                     id="comparePhotosButton"
-                >
-                    Compare Photos
-                </button>
+                >Compare Photos</button>
 
                 <p
                     id="comparisonMessage"
                     class="comparison-message"
                     role="status"
                     aria-live="polite"
-                >
-                    Select both photographs to start comparison.
-                </p>
+                >Select both photographs to start comparison.</p>
 
                 <div
                     id="comparisonResult"
@@ -377,17 +357,14 @@
                     hidden
                 >
                     <h3>Photo Comparison Result</h3>
-
                     <p>Visual Difference</p>
                     <p class="percentage" id="changePercent">-</p>
-
                     <p id="comparisonNote">
                         An officer must verify the repair.
                     </p>
                 </div>
             </div>
 
-            <!-- VERIFICATION -->
             <div class="details-card">
                 <p class="section-label">RESOLUTION VERIFICATION</p>
                 <h2>Maintenance Verification</h2>
@@ -424,7 +401,6 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer>
         <strong>RailSafe</strong>
         <p>Railway Maintenance Management System</p>
@@ -433,7 +409,6 @@
 
     <script src="script.js"></script>
 
-    <!-- PHOTO PREVIEW AND CV COMPARISON -->
     <script>
     (() => {
         const byId = id => document.getElementById(id);
@@ -475,11 +450,19 @@
 
             if (isBefore) {
                 beforeFile = file;
-                if (beforeUrl) URL.revokeObjectURL(beforeUrl);
+
+                if (beforeUrl) {
+                    URL.revokeObjectURL(beforeUrl);
+                }
+
                 beforeUrl = URL.createObjectURL(file);
             } else {
                 afterFile = file;
-                if (afterUrl) URL.revokeObjectURL(afterUrl);
+
+                if (afterUrl) {
+                    URL.revokeObjectURL(afterUrl);
+                }
+
                 afterUrl = URL.createObjectURL(file);
             }
 
@@ -493,25 +476,42 @@
 
             display.replaceChildren(img);
             resultBox.hidden = true;
+
             message.textContent = beforeFile && afterFile
                 ? "Both photos are selected. You can compare them now."
                 : "Photo selected. Please select the other photo too.";
         }
 
         beforeCamera.addEventListener("change", () => {
-            setPhoto(beforeCamera.files[0], "before", "beforePhotoDisplay");
+            setPhoto(
+                beforeCamera.files[0],
+                "before",
+                "beforePhotoDisplay"
+            );
         });
 
         beforeGallery.addEventListener("change", () => {
-            setPhoto(beforeGallery.files[0], "before", "beforePhotoDisplay");
+            setPhoto(
+                beforeGallery.files[0],
+                "before",
+                "beforePhotoDisplay"
+            );
         });
 
         afterCamera.addEventListener("change", () => {
-            setPhoto(afterCamera.files[0], "after", "afterPhotoDisplay");
+            setPhoto(
+                afterCamera.files[0],
+                "after",
+                "afterPhotoDisplay"
+            );
         });
 
         afterGallery.addEventListener("change", () => {
-            setPhoto(afterGallery.files[0], "after", "afterPhotoDisplay");
+            setPhoto(
+                afterGallery.files[0],
+                "after",
+                "afterPhotoDisplay"
+            );
         });
 
         compareButton.addEventListener("click", async () => {
@@ -530,24 +530,42 @@
             message.textContent = "Comparing photos. Please wait...";
 
             try {
+                // Use the current deployed website's backend.
                 const response = await fetch(
-                    "http://localhost:8080/api/evidence/compare",
+                    "/api/evidence/compare",
                     {
                         method: "POST",
                         body: formData
                     }
                 );
 
-                const data = await response.json();
+                const responseText = await response.text();
+                let data;
+
+                try {
+                    data = responseText ? JSON.parse(responseText) : {};
+                } catch {
+                    data = {
+                        error: responseText || "The server returned an unreadable response."
+                    };
+                }
 
                 if (!response.ok) {
+                    const details = data.details
+                        ? " " + data.details
+                        : "";
+
                     throw new Error(
-                        data.error || data.message || "Comparison failed."
+                        (data.error || data.message ||
+                            "Comparison failed with HTTP " + response.status) +
+                        details
                     );
                 }
 
                 if (typeof data.change_percent !== "number") {
-                    throw new Error("The server did not return a comparison percentage.");
+                    throw new Error(
+                        "The server response did not contain a comparison percentage."
+                    );
                 }
 
                 byId("changePercent").textContent =
@@ -558,13 +576,16 @@
                     "An officer must verify whether the repair is successful.";
 
                 resultBox.hidden = false;
+
                 message.textContent =
                     data.message || "Photo comparison completed.";
 
             } catch (error) {
+                console.error("RailSafe photo comparison error:", error);
+
                 message.textContent =
-                    "Comparison failed: " + error.message +
-                    " Check that Spring Boot and Flask are running.";
+                    "Comparison failed: " +
+                    (error.message || "Unable to contact the server.");
             } finally {
                 compareButton.disabled = false;
             }
@@ -574,3 +595,4 @@
 
 </body>
 </html>
+
