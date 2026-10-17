@@ -5,7 +5,7 @@
    Frontend: Live Server on port 5500
    ========================================================= */
 
-const API_BASE = "http://localhost:8080";
+const API_BASE = "https://railsafe-2.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("RailSafe system loaded successfully.");
