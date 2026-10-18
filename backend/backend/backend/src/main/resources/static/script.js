@@ -1,12 +1,10 @@
+
 /* =========================================================
    RAILSAFE - MAIN JAVASCRIPT
-   Backend: Spring Boot on port 8080
-   Frontend: Live Server on port 5500
+   Issue reporting, tracking and maintenance management
    ========================================================= */
 
-
 const API_BASE = "https://railsafe-2.onrender.com";
-
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("RailSafe system loaded successfully.");
@@ -16,16 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     setupReportForm();
     setupTrackForm();
     setupPhotoNames();
-    setupEvidenceUpload();
     loadDashboardIssues();
     loadDashboardStats();
     loadIssueDetails();
     setupIssueDetailsStatus();
 });
 
-/* =========================================================
-   REGISTER
-   ========================================================= */
+/* ========================= REGISTER ========================= */
 
 function setupRegisterForm() {
     const form = document.getElementById("registerForm");
@@ -55,9 +50,7 @@ function setupRegisterForm() {
     });
 }
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/* ========================= LOGIN ========================= */
 
 function setupLoginForm() {
     const form = document.getElementById("loginForm");
@@ -87,9 +80,7 @@ function showMessage(element, message, success) {
     element.style.color = success ? "#177245" : "#b42318";
 }
 
-/* =========================================================
-   REPORT ISSUE
-   ========================================================= */
+/* ========================= REPORT ISSUE ========================= */
 
 function setupReportForm() {
     const form = document.getElementById("reportForm");
@@ -148,16 +139,14 @@ function setupReportForm() {
             console.error("Report submission error:", error);
             showMessage(
                 message,
-                "Unable to submit issue. Check that the backend is running.",
+                "Unable to submit issue. Please try again later.",
                 false
             );
         }
     });
 }
 
-/* =========================================================
-   TRACK ISSUE
-   ========================================================= */
+/* ========================= TRACK ISSUE ========================= */
 
 function setupTrackForm() {
     const form = document.getElementById("trackForm");
@@ -189,7 +178,7 @@ function setupTrackForm() {
 
             const issue = await response.json();
 
-            if (!issue || !issue.reportId) {
+            if (!issue || issue.reportId == null) {
                 throw new Error("Issue not found");
             }
 
@@ -201,22 +190,21 @@ function setupTrackForm() {
             setText("trackInfrastructure", issue.issueType);
             setText("trackIssueHeading", issue.issueType);
             setText("trackDescription", issue.description || issue.issueType);
-            setText("trackLocation", `${issue.station} — Platform ${issue.platform}`);
+            setText(
+                "trackLocation",
+                `${issue.station} — Platform ${issue.platform}`
+            );
             setText("trackIssueDetected", issue.issueType);
-            setText("beforeLocation", `${issue.station} • Platform ${issue.platform}`);
-            setText("afterLocation", `${issue.station} • Platform ${issue.platform}`);
             setText("trackStatus", issue.status || "Reported");
 
             updateTimeline(issue.status || "Reported");
-            loadEvidence(issue.reportId);
 
             console.log("Issue loaded:", issue);
         } catch (error) {
             result.hidden = true;
             console.error("Track issue error:", error);
-
             alert(
-                "Unable to find this Report ID. Check the ID and make sure the backend is running."
+                "Unable to find this Report ID. Check the ID and try again."
             );
         }
     });
@@ -227,24 +215,21 @@ function normalizeReportId(value) {
         .trim()
         .replace(/^RR-/i, "");
 
-    if (!/^\d+$/.test(cleaned)) return "";
-    return cleaned;
+    return /^\d+$/.test(cleaned) ? cleaned : "";
 }
 
-/* =========================================================
-   SET TEXT
-   ========================================================= */
+/* ========================= SET TEXT ========================= */
 
 function setText(id, value) {
     const element = document.getElementById(id);
+
     if (element) {
-        element.textContent = value == null || value === "" ? "-" : value;
+        element.textContent =
+            value == null || value === "" ? "-" : value;
     }
 }
 
-/* =========================================================
-   STATUS TIMELINE
-   ========================================================= */
+/* ========================= STATUS TIMELINE ========================= */
 
 function updateTimeline(status) {
     const elementIds = [
@@ -281,16 +266,10 @@ function updateTimeline(status) {
     });
 }
 
-/* =========================================================
-   PHOTO FILE NAME DISPLAY
-   ========================================================= */
+/* ========================= REPORT PHOTO NAMES ========================= */
 
 function setupPhotoNames() {
     [
-        ["beforeCamera", "beforePhotoName"],
-        ["beforeGallery", "beforePhotoName"],
-        ["afterCamera", "afterPhotoName"],
-        ["afterGallery", "afterPhotoName"],
         ["issuePhotoCamera", "photoName"],
         ["issuePhotoGallery", "photoName"]
     ].forEach(function (pair) {
@@ -305,135 +284,14 @@ function setupPhotoName(inputId, nameId) {
     if (!input || !display) return;
 
     input.addEventListener("change", function () {
-        if (this.files && this.files.length > 0) {
-            display.textContent = this.files[0].name;
-        } else {
-            display.textContent = "";
-        }
+        display.textContent =
+            this.files && this.files.length > 0
+                ? this.files[0].name
+                : "";
     });
 }
 
-/* =========================================================
-   BEFORE / AFTER EVIDENCE UPLOAD
-   ========================================================= */
-
-function setupEvidenceUpload() {
-    setupEvidenceInput("beforeCamera", "before");
-    setupEvidenceInput("beforeGallery", "before");
-    setupEvidenceInput("afterCamera", "after");
-    setupEvidenceInput("afterGallery", "after");
-}
-
-function setupEvidenceInput(inputId, type) {
-    const input = document.getElementById(inputId);
-    if (!input) return;
-
-    input.addEventListener("change", function () {
-        if (this.files && this.files.length > 0) {
-            uploadEvidence(this.files[0], type);
-        }
-    });
-}
-
-async function uploadEvidence(file, type) {
-    const reportIdInput = document.getElementById("reportId");
-
-    if (!reportIdInput) {
-        alert("Please enter the Report ID first.");
-        return;
-    }
-
-    const reportId = normalizeReportId(reportIdInput.value);
-
-    if (!reportId) {
-        alert("Enter a valid Report ID, for example RR-1, before uploading photos.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("reportId", reportId);
-    formData.append(type === "before" ? "beforePhoto" : "afterPhoto", file);
-
-    try {
-        const response = await fetch(`${API_BASE}/api/evidence/upload`, {
-            method: "POST",
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error(`Photo upload failed (${response.status})`);
-        }
-
-        const evidence = await response.json();
-
-        alert(`${type === "before" ? "Before" : "After"} photo uploaded successfully!`);
-        displayEvidence(evidence);
-        console.log("Evidence saved:", evidence);
-    } catch (error) {
-        console.error("Evidence upload error:", error);
-        alert("Unable to upload photo. Check the backend and Report ID.");
-    }
-}
-
-/* =========================================================
-   LOAD SAVED EVIDENCE
-   ========================================================= */
-
-async function loadEvidence(reportId) {
-    try {
-        const response = await fetch(`${API_BASE}/api/evidence/${reportId}`);
-
-        if (!response.ok) return;
-
-        const evidence = await response.json();
-        if (evidence) displayEvidence(evidence);
-    } catch (error) {
-        console.log("Evidence not available yet.", error);
-    }
-}
-
-function displayEvidence(evidence) {
-    const beforeDisplay = document.getElementById("beforePhotoDisplay");
-    const afterDisplay = document.getElementById("afterPhotoDisplay");
-
-    if (beforeDisplay && evidence.beforePhoto) {
-        beforeDisplay.innerHTML = "";
-
-        const beforeImage = document.createElement("img");
-        beforeImage.src = evidence.beforePhoto;
-        beforeImage.alt = "Before maintenance evidence";
-        beforeImage.style.cssText =
-            "width:100%;height:100%;object-fit:cover;border-radius:8px;";
-
-        beforeDisplay.appendChild(beforeImage);
-    }
-
-    if (afterDisplay && evidence.afterPhoto) {
-        afterDisplay.innerHTML = "";
-
-        const afterImage = document.createElement("img");
-        afterImage.src = evidence.afterPhoto;
-        afterImage.alt = "After maintenance evidence";
-        afterImage.style.cssText =
-            "width:100%;height:100%;object-fit:cover;border-radius:8px;";
-
-        afterDisplay.appendChild(afterImage);
-    }
-
-    if (evidence.beforePhoto) {
-        setText("beforeEvidenceStatus", "Uploaded");
-        setText("beforeVerificationStatus", "Available");
-    }
-
-    if (evidence.afterPhoto) {
-        setText("afterEvidenceStatus", "Uploaded");
-        setText("afterVerificationStatus", "Available");
-    }
-}
-
-/* =========================================================
-   DASHBOARD ISSUE TABLE
-   ========================================================= */
+/* ========================= DASHBOARD ISSUE TABLE ========================= */
 
 async function loadDashboardIssues() {
     const table = document.querySelector(".issue-table tbody");
@@ -475,7 +333,8 @@ async function loadDashboardIssues() {
             const actionCell = document.createElement("td");
             const link = document.createElement("a");
 
-            link.href = `issue-details.html?id=RR-${encodeURIComponent(issue.reportId)}`;
+            link.href =
+                `issue-details.html?id=RR-${encodeURIComponent(issue.reportId)}`;
             link.className = "view-button";
             link.textContent = "View";
 
@@ -488,9 +347,7 @@ async function loadDashboardIssues() {
     }
 }
 
-/* =========================================================
-   DASHBOARD STATISTICS
-   ========================================================= */
+/* ========================= DASHBOARD STATISTICS ========================= */
 
 async function loadDashboardStats() {
     try {
@@ -530,9 +387,7 @@ async function loadDashboardStats() {
     }
 }
 
-/* =========================================================
-   ISSUE DETAILS PAGE
-   ========================================================= */
+/* ========================= ISSUE DETAILS PAGE ========================= */
 
 async function loadIssueDetails() {
     const reportIdElement = document.getElementById("detailReportId");
@@ -569,9 +424,7 @@ async function loadIssueDetails() {
     }
 }
 
-/* =========================================================
-   UPDATE ISSUE STATUS
-   ========================================================= */
+/* ========================= UPDATE ISSUE STATUS ========================= */
 
 function setupIssueDetailsStatus() {
     const button = document.getElementById("updateStatusButton");
@@ -606,7 +459,7 @@ function setupIssueDetailsStatus() {
             alert(`Issue status updated to: ${issue.status}`);
         } catch (error) {
             console.error("Status update error:", error);
-            alert("Unable to update issue status. Check the backend.");
+            alert("Unable to update issue status. Please try again.");
         }
     });
 }
