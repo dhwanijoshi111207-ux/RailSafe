@@ -1,4 +1,4 @@
-```java
+
 package com.railsafe.backend.model;
 
 import jakarta.persistence.Column;
@@ -56,4 +56,4 @@ public class Evidence {
         this.afterPhoto = afterPhoto;
     }
 }
-```
+
