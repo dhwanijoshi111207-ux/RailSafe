@@ -1,11 +1,12 @@
-
 /* =========================================================
    RAILSAFE - MAIN JAVASCRIPT
    Backend: Spring Boot on port 8080
    Frontend: Live Server on port 5500
    ========================================================= */
 
+
 const API_BASE = "https://railsafe-2.onrender.com";
+
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("RailSafe system loaded successfully.");
@@ -609,4 +610,6 @@ function setupIssueDetailsStatus() {
         }
     });
 }
+
+
 
