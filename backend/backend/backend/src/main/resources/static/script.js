@@ -2,6 +2,7 @@
 /* =========================================================
    RAILSAFE - MAIN JAVASCRIPT
    Issue reporting, tracking and maintenance management
+   No photo comparison or CV testing
    ========================================================= */
 
 const API_BASE = "https://railsafe-2.onrender.com";
@@ -19,6 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
     loadIssueDetails();
     setupIssueDetailsStatus();
 });
+
+/* ========================= COMMON MESSAGE ========================= */
+
+function showMessage(element, message, success) {
+    if (!element) return;
+    element.textContent = message;
+    element.style.color = success ? "#177245" : "#b42318";
+}
 
 /* ========================= REGISTER ========================= */
 
@@ -72,12 +81,6 @@ function setupLoginForm() {
 
         showMessage(message, "Login form validated successfully.", true);
     });
-}
-
-function showMessage(element, message, success) {
-    if (!element) return;
-    element.textContent = message;
-    element.style.color = success ? "#177245" : "#b42318";
 }
 
 /* ========================= REPORT ISSUE ========================= */
@@ -190,22 +193,21 @@ function setupTrackForm() {
             setText("trackInfrastructure", issue.issueType);
             setText("trackIssueHeading", issue.issueType);
             setText("trackDescription", issue.description || issue.issueType);
-            setText(
-                "trackLocation",
-                `${issue.station} — Platform ${issue.platform}`
-            );
+            setText("trackLocation", `${issue.station} — Platform ${issue.platform}`);
             setText("trackIssueDetected", issue.issueType);
             setText("trackStatus", issue.status || "Reported");
 
             updateTimeline(issue.status || "Reported");
 
+            // Before/After evidence connection will be added after
+            // confirming the backend evidence API.
+            resetEvidenceDisplay();
+
             console.log("Issue loaded:", issue);
         } catch (error) {
             result.hidden = true;
             console.error("Track issue error:", error);
-            alert(
-                "Unable to find this Report ID. Check the ID and try again."
-            );
+            alert("Unable to find this Report ID. Check the ID and try again.");
         }
     });
 }
@@ -248,7 +250,9 @@ function updateTimeline(status) {
         ["Closed"]
     ];
 
-    let activeIndex = stages.findIndex(stage => stage.includes(status));
+    let activeIndex = stages.findIndex(stage =>
+        stage.some(value => value.toLowerCase() === String(status).toLowerCase())
+    );
 
     if (activeIndex < 0) activeIndex = 0;
 
@@ -264,6 +268,28 @@ function updateTimeline(status) {
             element.classList.add("active", "completed");
         }
     });
+}
+
+/* ========================= BEFORE / AFTER DISPLAY ========================= */
+
+function resetEvidenceDisplay() {
+    const beforeImage = document.getElementById("beforePhotoDisplay");
+    const afterImage = document.getElementById("afterPhotoDisplay");
+    const beforeStatus = document.getElementById("beforeEvidenceStatus");
+    const afterStatus = document.getElementById("afterEvidenceStatus");
+
+    if (beforeImage) {
+        beforeImage.removeAttribute("src");
+        beforeImage.style.display = "none";
+    }
+
+    if (afterImage) {
+        afterImage.removeAttribute("src");
+        afterImage.style.display = "none";
+    }
+
+    if (beforeStatus) beforeStatus.textContent = "Before photo connection pending.";
+    if (afterStatus) afterStatus.textContent = "After photo connection pending.";
 }
 
 /* ========================= REPORT PHOTO NAMES ========================= */
@@ -463,6 +489,3 @@ function setupIssueDetailsStatus() {
         }
     });
 }
-
-
-
