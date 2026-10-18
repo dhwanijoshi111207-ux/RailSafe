@@ -47,16 +47,20 @@
 
             <div class="issue-information">
                 <div class="info-card">
-                    <span>Report ID</span><strong id="trackReportId">-</strong>
+                    <span>Report ID</span>
+                    <strong id="trackReportId">-</strong>
                 </div>
                 <div class="info-card">
-                    <span>Station</span><strong id="trackStation">-</strong>
+                    <span>Station</span>
+                    <strong id="trackStation">-</strong>
                 </div>
                 <div class="info-card">
-                    <span>Platform</span><strong id="trackPlatform">-</strong>
+                    <span>Platform</span>
+                    <strong id="trackPlatform">-</strong>
                 </div>
                 <div class="info-card">
-                    <span>Infrastructure</span><strong id="trackInfrastructure">-</strong>
+                    <span>Infrastructure</span>
+                    <strong id="trackInfrastructure">-</strong>
                 </div>
             </div>
 
@@ -75,33 +79,72 @@
                 </p>
             </div>
 
+            <!-- Before and After Photos: no comparison functionality -->
+            <div class="details-card">
+                <p class="section-label">MAINTENANCE EVIDENCE</p>
+                <h2>Before &amp; After Photos</h2>
+                <p>View the issue evidence and repair progress photos.</p>
+
+                <div class="issue-information">
+                    <div class="info-card">
+                        <h3>Before Photo</h3>
+                        <img id="beforePhotoDisplay"
+                             alt="Before maintenance photo"
+                             style="width:100%; max-width:350px; display:none;">
+                        <p id="beforeEvidenceStatus">Before photo not available.</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>After Photo</h3>
+                        <img id="afterPhotoDisplay"
+                             alt="After maintenance photo"
+                             style="width:100%; max-width:350px; display:none;">
+                        <p id="afterEvidenceStatus">After photo not available.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="status-section">
                 <h2>Maintenance Progress</h2>
                 <div class="timeline">
                     <div class="timeline-item" id="timelineReported">
                         <div class="timeline-dot"></div>
-                        <div><strong>Issue Reported</strong>
-                            <p>Issue submitted to RailSafe.</p></div>
+                        <div>
+                            <strong>Issue Reported</strong>
+                            <p>Issue submitted to RailSafe.</p>
+                        </div>
                     </div>
+
                     <div class="timeline-item" id="timelineAssigned">
                         <div class="timeline-dot"></div>
-                        <div><strong>Assigned</strong>
-                            <p>Maintenance team assignment.</p></div>
+                        <div>
+                            <strong>Assigned</strong>
+                            <p>Maintenance team assignment.</p>
+                        </div>
                     </div>
+
                     <div class="timeline-item" id="timelineMaintenance">
                         <div class="timeline-dot"></div>
-                        <div><strong>Under Maintenance</strong>
-                            <p>Repair work in progress.</p></div>
+                        <div>
+                            <strong>Under Maintenance</strong>
+                            <p>Repair work in progress.</p>
+                        </div>
                     </div>
+
                     <div class="timeline-item" id="timelineResolved">
                         <div class="timeline-dot"></div>
-                        <div><strong>Resolved</strong>
-                            <p>Maintenance work marked as resolved.</p></div>
+                        <div>
+                            <strong>Resolved</strong>
+                            <p>Maintenance work marked as resolved.</p>
+                        </div>
                     </div>
+
                     <div class="timeline-item" id="timelineClosed">
                         <div class="timeline-dot"></div>
-                        <div><strong>Closed</strong>
-                            <p>Final officer verification completed.</p></div>
+                        <div>
+                            <strong>Closed</strong>
+                            <p>Final officer verification completed.</p>
+                        </div>
                     </div>
                 </div>
             </div>
