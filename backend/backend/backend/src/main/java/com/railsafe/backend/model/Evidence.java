@@ -1,5 +1,7 @@
+
 package com.railsafe.backend.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +18,10 @@ public class Evidence {
 
     private Integer reportId;
 
+    @Column(columnDefinition = "TEXT")
     private String beforePhoto;
 
+    @Column(columnDefinition = "TEXT")
     private String afterPhoto;
 
     public Integer getEvidenceId() {
@@ -52,3 +56,4 @@ public class Evidence {
         this.afterPhoto = afterPhoto;
     }
 }
+
