@@ -1,484 +1,146 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Issue Details | RailSafe</title>
-
     <link rel="stylesheet" href="style.css">
-
+    <style>
+        .rs-card { background:#fff; padding:22px; margin:20px auto; max-width:1000px; border-radius:12px; box-shadow:0 2px 12px #00000012; }
+        .rs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+        .rs-field { display:flex; flex-direction:column; gap:7px; margin:10px 0; }
+        .rs-field input,.rs-field select { padding:11px; border:1px solid #ccc; border-radius:6px; }
+        .rs-button { margin-top:12px; padding:12px 18px; border:0; border-radius:7px; cursor:pointer; }
+        .rs-result { margin-top:12px; white-space:pre-wrap; }
+        .rs-photo { max-width:100%; max-height:260px; object-fit:contain; display:block; margin-top:12px; }
+    </style>
 </head>
-
 <body>
+<nav class="navbar">
+    <div class="logo"><span>Rail</span>Safe</div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="report.html">Report Issue</a>
+        <a href="track.html">Track Issue</a>
+        <a href="dashboard.html">Officer Dashboard</a>
+        <a href="login.html">Logout</a>
+    </div>
+</nav>
 
-    <!-- NAVBAR -->
+<main class="issue-details-page">
+    <header class="page-header">
+        <p class="hero-label">MAINTENANCE CONTROL</p>
+        <h1>Issue Details</h1>
+        <p>Review assignments, upload evidence and manage issue status.</p>
+    </header>
 
-    <nav class="navbar">
+    <section class="rs-card">
+        <p class="card-label">REPORT ID</p>
+        <h2 id="detailReportId">Loading...</h2>
+        <div class="rs-grid">
+            <div><span>Station</span><p id="detailStation">Loading...</p></div>
+            <div><span>Platform</span><p id="detailPlatform">Loading...</p></div>
+            <div><span>Infrastructure</span><p id="detailIssueType">Loading...</p></div>
+            <div><span>Priority</span><p id="detailPriority">Loading...</p></div>
+            <div><span>Current Status</span><p id="detailStatus">Loading...</p></div>
+            <div><span>Description</span><p id="detailReportedIssue">Loading...</p></div>
+        </div>
+        <p>Location: <strong id="detailLocation">Loading...</strong></p>
+        <p>Report status: <strong id="detailReportStatus">Loading...</strong></p>
+    </section>
 
-        <div class="logo">
-            <span>Rail</span>Safe
+    <section class="rs-card">
+        <p class="hero-label">MAINTENANCE WORKFLOW</p>
+        <h2>Maintenance Assignment</h2>
+        <div class="rs-grid">
+            <div><span>Assigned Team</span><p id="assignedTeamDisplay">Not Assigned</p></div>
+            <div><span>Responsible Officer</span><p id="assignedOfficerDisplay">Awaiting Assignment</p></div>
+            <div><span>Maintenance Status</span><p id="maintenanceStatusDisplay">Not Assigned</p></div>
         </div>
 
-        <div class="nav-links">
-
-            <a href="index.html">Home</a>
-
-            <a href="report.html">Report Issue</a>
-
-            <a href="track.html">Track Issue</a>
-
-            <a href="dashboard.html">Officer Dashboard</a>
-
-            <a href="login.html">Logout</a>
-
-        </div>
-
-    </nav>
-
-
-    <!-- ISSUE DETAILS -->
-
-    <main class="issue-details-page">
-
-
-        <!-- HEADER -->
-
-        <div class="page-header">
-
-            <p class="hero-label">
-                MAINTENANCE CONTROL
-            </p>
-
-            <h1>
-                Issue Details
-            </h1>
-
-            <p>
-                Review maintenance activity, evidence and verification status.
-            </p>
-
-        </div>
-
-
-        <!-- ISSUE SUMMARY -->
-
-        <section class="issue-detail-card">
-
-            <div class="issue-detail-header">
-
-                <div>
-
-                    <p class="card-label">
-                        REPORT ID
-                    </p>
-
-                    <h2 id="detailReportId">
-                        Loading...
-                    </h2>
-
-                </div>
-
-                <span class="priority-badge medium" id="detailPriority">
-                    Medium
-                </span>
-
-            </div>
-
-
-            <div class="profile-grid">
-
-                <div class="profile-field">
-
-                    <span>
-                        Station
-                    </span>
-
-                    <strong id="detailStation">
-                        Loading...
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        Platform
-                    </span>
-
-                    <strong id="detailPlatform">
-                        Loading...
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        Infrastructure
-                    </span>
-
-                    <strong id="detailIssueType">
-                        Loading...
-                    </strong>
-
-                </div>
-
-
-                <div class="profile-field">
-
-                    <span>
-                        Current Status
-                    </span>
-
-                    <strong id="detailStatus">
-                        Loading...
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- REPORTED ISSUE -->
-
-        <section class="issue-detail-card">
-
-            <div class="section-heading">
-
-                <p class="hero-label">
-                    ISSUE INFORMATION
-                </p>
-
-                <h2>
-                    Reported Issue
-                </h2>
-
-            </div>
-
-
-            <div class="evidence-info">
-
-                <div class="evidence-item">
-
-                    <span>
-                        Issue
-                    </span>
-
-                    <strong id="detailReportedIssue">
-                        Loading...
-                    </strong>
-
-                </div>
-
-
-                <div class="evidence-item">
-
-                    <span>
-                        Reported Location
-                    </span>
-
-                    <strong id="detailLocation">
-                        Loading...
-                    </strong>
-
-                </div>
-
-
-                <div class="evidence-item">
-
-                    <span>
-                        Report Status
-                    </span>
-
-                    <strong id="detailReportStatus">
-                        Loading...
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ASSIGNMENT -->
-
-        <section class="issue-detail-card">
-
-            <div class="section-heading">
-
-                <p class="hero-label">
-                    MAINTENANCE WORKFLOW
-                </p>
-
-                <h2>
-                    Maintenance Assignment
-                </h2>
-
-            </div>
-
-
-            <div class="evidence-info">
-
-                <div class="evidence-item">
-
-                    <span>
-                        Assigned Team
-                    </span>
-
-                    <strong>
-                        Not Assigned
-                    </strong>
-
-                </div>
-
-
-                <div class="evidence-item">
-
-                    <span>
-                        Responsible Officer
-                    </span>
-
-                    <strong>
-                        Awaiting Assignment
-                    </strong>
-
-                </div>
-
-
-                <div class="evidence-item">
-
-                    <span>
-                        Assignment Status
-                    </span>
-
-                    <strong>
-                        Not Assigned
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- EVIDENCE VERIFICATION -->
-
-        <section class="issue-detail-card">
-
-            <div class="section-heading">
-
-                <p class="hero-label">
-                    EVIDENCE VERIFICATION
-                </p>
-
-                <h2>
-                    Maintenance Evidence
-                </h2>
-
-            </div>
-
-
-            <div class="verification-grid">
-
-
-                <div class="verification-box">
-
-                    <span class="card-label">
-                        BEFORE EVIDENCE
-                    </span>
-
-                    <h3>
-                        ⏳ Awaiting Upload
-                    </h3>
-
-                    <p>
-                        Evidence will be available after the employee
-                        submits the issue photograph.
-                    </p>
-
-                </div>
-
-
-                <div class="verification-box">
-
-                    <span class="card-label">
-                        AFTER EVIDENCE
-                    </span>
-
-                    <h3>
-                        ⏳ Awaiting Upload
-                    </h3>
-
-                    <p>
-                        Maintenance team must upload repair evidence.
-                    </p>
-
-                </div>
-
-
-                <div class="verification-box">
-
-                    <span class="card-label">
-                        CV ANALYSIS
-                    </span>
-
-                    <h3>
-                        ⏳ Awaiting Evidence
-                    </h3>
-
-                    <p>
-                        Computer vision comparison will run after
-                        the After photograph is uploaded.
-                    </p>
-
-                </div>
-
-
-                <div class="verification-box">
-
-                    <span class="card-label">
-                        OFFICER VERIFICATION
-                    </span>
-
-                    <h3>
-                        ⏳ Pending
-                    </h3>
-
-                    <p>
-                        Final verification is required before closure.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- STATUS MANAGEMENT -->
-
-        <section class="issue-detail-card">
-
-            <div class="section-heading">
-
-                <p class="hero-label">
-                    OFFICER ACTION
-                </p>
-
-                <h2>
-                    Status Management
-                </h2>
-
-            </div>
-
-
-            <div class="status-update">
-
-                <label for="issueStatus">
-                    Update Issue Status
+        <form id="maintenanceForm">
+            <div class="rs-grid">
+                <label class="rs-field">Assigned Team
+                    <input id="assignedTeam" required placeholder="e.g. Electrical Team">
                 </label>
-
-
-                <select id="issueStatus">
-
-                    <option value="Reported">
-                        Reported
-                    </option>
-
-                    <option value="Assigned">
-                        Assigned
-                    </option>
-
-                    <option value="Inspection">
-                        Inspection
-                    </option>
-
-                    <option value="Under Maintenance">
-                        Under Maintenance
-                    </option>
-
-                    <option value="Resolved">
-                        Resolved
-                    </option>
-
-                    <option value="Closed">
-                        Closed
-                    </option>
-
-                </select>
-
-
-                <button
-                    type="button"
-                    class="primary-button"
-                    id="updateStatusButton"
-                >
-                    Update Status
-                </button>
-
+                <label class="rs-field">Assigned Officer
+                    <input id="assignedOfficer" required placeholder="Officer name">
+                </label>
+                <label class="rs-field">Maintenance Status
+                    <select id="maintenanceStatus" required>
+                        <option value="Assigned">Assigned</option>
+                        <option value="Inspection">Inspection</option>
+                        <option value="Under Maintenance">Under Maintenance</option>
+                        <option value="Completed">Completed</option>
+                    </select>
+                </label>
             </div>
+            <button class="primary-button rs-button" type="submit">Save Maintenance Assignment</button>
+            <p id="maintenanceMessage" class="rs-result" role="status"></p>
+        </form>
+    </section>
 
-        </section>
+    <section class="rs-card">
+        <p class="hero-label">EVIDENCE VERIFICATION</p>
+        <h2>Before and After Photos</h2>
+        <p>Select photos for this issue. Upload saves them to the Evidence table; comparison reports visual differences only.</p>
 
-
-        <!-- WARNING -->
-
-        <section class="verification-alert">
-
-            <div class="notice-icon">
-                !
-            </div>
-
-            <div>
-
-                <h3>
-                    Do not close without evidence
-                </h3>
-
-                <p>
-                    An issue should only be marked as Resolved or Closed
-                    after maintenance work is completed, After evidence
-                    is uploaded and the officer verifies the result.
-                </p>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- FOOTER -->
-
-    <footer>
-
-        <div class="footer-logo">
-            RailSafe
+        <div class="rs-grid">
+            <label class="rs-field">Before Photo
+                <input type="file" id="beforePhoto" accept="image/*">
+                <span id="beforePhotoName"></span>
+            </label>
+            <label class="rs-field">After Photo
+                <input type="file" id="afterPhoto" accept="image/*">
+                <span id="afterPhotoName"></span>
+            </label>
         </div>
 
-        <p>
-            Railway Maintenance Management System
-        </p>
+        <button type="button" class="primary-button rs-button" id="uploadEvidenceButton">Upload Evidence Photos</button>
+        <button type="button" class="primary-button rs-button" id="compareEvidenceButton">Compare Two Photos</button>
+        <p id="evidenceMessage" class="rs-result" role="status"></p>
+        <p id="comparisonResult" class="rs-result" role="status"></p>
 
-        <p>
-            © 2026 RailSafe. Maintenance Operations Portal.
-        </p>
+        <div class="rs-grid">
+            <div>
+                <h3>Saved Before Photo</h3>
+                <img id="savedBeforePhoto" class="rs-photo" alt="Saved before evidence" hidden>
+            </div>
+            <div>
+                <h3>Saved After Photo</h3>
+                <img id="savedAfterPhoto" class="rs-photo" alt="Saved after evidence" hidden>
+            </div>
+        </div>
+    </section>
 
-    </footer>
+    <section class="rs-card">
+        <p class="hero-label">OFFICER ACTION</p>
+        <h2>Status Management</h2>
+        <label class="rs-field" for="issueStatus">Update Issue Status
+            <select id="issueStatus">
+                <option value="Reported">Reported</option>
+                <option value="Assigned">Assigned</option>
+                <option value="Inspection">Inspection</option>
+                <option value="Under Maintenance">Under Maintenance</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Closed">Closed</option>
+            </select>
+        </label>
+        <button type="button" class="primary-button rs-button" id="updateStatusButton">Update Issue Status</button>
+    </section>
 
+    <section class="rs-card">
+        <h3>Important</h3>
+        <p>Before marking an issue Resolved or Closed, upload the after-photo evidence and ensure an authorised officer has physically verified the repair. A visual-difference percentage alone does not prove that a repair is successful.</p>
+    </section>
+</main>
 
-    <script src="script.js"></script>
-
+<footer>
+    <div class="footer-logo">RailSafe</div>
+    <p>Railway Maintenance Management System</p>
+    <p>© 2026 RailSafe. Maintenance Operations Portal.</p>
+</footer>
+<script src="script.js"></script>
 </body>
-
 </html>

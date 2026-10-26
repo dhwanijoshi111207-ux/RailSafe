@@ -1,37 +1,56 @@
+
 /* =========================================================
    RAILSAFE - MAIN JAVASCRIPT
-   Backend: Spring Boot on port 8080
-   Frontend: Live Server on port 5500
+   Issues, Dashboard, Maintenance, Evidence and Photo Compare
    ========================================================= */
-
 
 const API_BASE = "https://railsafe-2.onrender.com";
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("RailSafe system loaded successfully.");
-
+document.addEventListener("DOMContentLoaded", () => {
     setupRegisterForm();
     setupLoginForm();
     setupReportForm();
     setupTrackForm();
     setupPhotoNames();
-    setupEvidenceUpload();
     loadDashboardIssues();
     loadDashboardStats();
     loadIssueDetails();
     setupIssueDetailsStatus();
+    setupMaintenanceForm();
+    setupEvidenceForm();
 });
 
-/* =========================================================
-   REGISTER
-   ========================================================= */
+/* ================= COMMON HELPERS ================= */
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value == null || value === "" ? "-" : value;
+}
+
+function showMessage(el, message, success = false) {
+    if (!el) return;
+    el.textContent = message;
+    el.style.color = success ? "#177245" : "#b42318";
+}
+
+function normalizeReportId(value) {
+    const id = String(value || "").trim().replace(/^RR-/i, "");
+    return /^\d+$/.test(id) ? id : "";
+}
+
+function currentReportId() {
+    return normalizeReportId(
+        new URLSearchParams(window.location.search).get("id")
+    );
+}
+
+/* ================= REGISTER ================= */
 
 function setupRegisterForm() {
     const form = document.getElementById("registerForm");
     if (!form) return;
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", event => {
         event.preventDefault();
 
         const name = document.getElementById("registerName");
@@ -42,28 +61,22 @@ function setupRegisterForm() {
         if (!name || !email || !password) return;
 
         if (!name.value.trim() || !email.value.trim() || !password.value) {
-            showMessage(message, "Please fill all required fields.", false);
-            return;
+            showMessage(message, "Please fill all required fields.");
+        } else if (password.value.length < 6) {
+            showMessage(message, "Password must contain at least 6 characters.");
+        } else {
+            showMessage(message, "Registration form validated successfully.", true);
         }
-
-        if (password.value.length < 6) {
-            showMessage(message, "Password must contain at least 6 characters.", false);
-            return;
-        }
-
-        showMessage(message, "Registration form validated successfully.", true);
     });
 }
 
-/* =========================================================
-   LOGIN
-   ========================================================= */
+/* ================= LOGIN ================= */
 
 function setupLoginForm() {
     const form = document.getElementById("loginForm");
     if (!form) return;
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", event => {
         event.preventDefault();
 
         const email = document.getElementById("loginEmail");
@@ -73,29 +86,20 @@ function setupLoginForm() {
         if (!email || !password) return;
 
         if (!email.value.trim() || !password.value.trim()) {
-            showMessage(message, "Please enter your email and password.", false);
-            return;
+            showMessage(message, "Please enter your email and password.");
+        } else {
+            showMessage(message, "Login form validated successfully.", true);
         }
-
-        showMessage(message, "Login form validated successfully.", true);
     });
 }
 
-function showMessage(element, message, success) {
-    if (!element) return;
-    element.textContent = message;
-    element.style.color = success ? "#177245" : "#b42318";
-}
-
-/* =========================================================
-   REPORT ISSUE
-   ========================================================= */
+/* ================= REPORT ISSUE ================= */
 
 function setupReportForm() {
     const form = document.getElementById("reportForm");
     if (!form) return;
 
-    form.addEventListener("submit", async function (event) {
+    form.addEventListener("submit", async event => {
         event.preventDefault();
 
         const station = document.getElementById("station");
@@ -106,13 +110,9 @@ function setupReportForm() {
 
         if (!station || !platform || !infrastructure || !description) return;
 
-        if (
-            !station.value.trim() ||
-            !platform.value.trim() ||
-            !infrastructure.value.trim() ||
-            !description.value.trim()
-        ) {
-            showMessage(message, "Please complete all required issue details.", false);
+        if (![station, platform, infrastructure, description]
+            .every(field => field.value.trim())) {
+            showMessage(message, "Please complete all required issue details.");
             return;
         }
 
@@ -130,9 +130,7 @@ function setupReportForm() {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`Issue submission failed (${response.status})`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const issue = await response.json();
 
@@ -143,27 +141,20 @@ function setupReportForm() {
             );
 
             form.reset();
-            console.log("Issue saved:", issue);
         } catch (error) {
-            console.error("Report submission error:", error);
-            showMessage(
-                message,
-                "Unable to submit issue. Check that the backend is running.",
-                false
-            );
+            console.error("Report error:", error);
+            showMessage(message, "Unable to submit issue. Please try again.");
         }
     });
 }
 
-/* =========================================================
-   TRACK ISSUE
-   ========================================================= */
+/* ================= TRACK ISSUE ================= */
 
 function setupTrackForm() {
     const form = document.getElementById("trackForm");
     if (!form) return;
 
-    form.addEventListener("submit", async function (event) {
+    form.addEventListener("submit", async event => {
         event.preventDefault();
 
         const input = document.getElementById("reportId");
@@ -171,30 +162,24 @@ function setupTrackForm() {
 
         if (!input || !result) return;
 
-        const reportId = normalizeReportId(input.value);
+        const id = normalizeReportId(input.value);
 
-        if (!reportId) {
-            alert("Please enter a valid Report ID, for example RR-1.");
+        if (!id) {
+            alert("Enter a valid Report ID, for example RR-1.");
             return;
         }
 
         try {
-            const response = await fetch(
-                `${API_BASE}/api/issues/${encodeURIComponent(reportId)}`
-            );
-
-            if (!response.ok) {
-                throw new Error(`Issue lookup failed (${response.status})`);
-            }
+            const response = await fetch(`${API_BASE}/api/issues/${id}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const issue = await response.json();
 
-            if (!issue || !issue.reportId) {
+            if (!issue || issue.reportId == null) {
                 throw new Error("Issue not found");
             }
 
             result.hidden = false;
-
             setText("trackReportId", `RR-${issue.reportId}`);
             setText("trackStation", issue.station);
             setText("trackPlatform", `Platform ${issue.platform}`);
@@ -203,51 +188,41 @@ function setupTrackForm() {
             setText("trackDescription", issue.description || issue.issueType);
             setText("trackLocation", `${issue.station} — Platform ${issue.platform}`);
             setText("trackIssueDetected", issue.issueType);
-            setText("beforeLocation", `${issue.station} • Platform ${issue.platform}`);
-            setText("afterLocation", `${issue.station} • Platform ${issue.platform}`);
             setText("trackStatus", issue.status || "Reported");
 
             updateTimeline(issue.status || "Reported");
-            loadEvidence(issue.reportId);
-
-            console.log("Issue loaded:", issue);
         } catch (error) {
             result.hidden = true;
-            console.error("Track issue error:", error);
-
-            alert(
-                "Unable to find this Report ID. Check the ID and make sure the backend is running."
-            );
+            console.error("Track error:", error);
+            alert("Unable to find this Report ID. Check the ID and try again.");
         }
     });
 }
 
-function normalizeReportId(value) {
-    const cleaned = String(value || "")
-        .trim()
-        .replace(/^RR-/i, "");
+/* ================= PHOTO FILE NAMES ================= */
 
-    if (!/^\d+$/.test(cleaned)) return "";
-    return cleaned;
+function setupPhotoNames() {
+    [
+        ["issuePhotoCamera", "photoName"],
+        ["issuePhotoGallery", "photoName"],
+        ["beforePhoto", "beforePhotoName"],
+        ["afterPhoto", "afterPhotoName"]
+    ].forEach(([inputId, displayId]) => {
+        const input = document.getElementById(inputId);
+        const display = document.getElementById(displayId);
+
+        if (!input || !display) return;
+
+        input.addEventListener("change", () => {
+            display.textContent = input.files?.[0]?.name || "";
+        });
+    });
 }
 
-/* =========================================================
-   SET TEXT
-   ========================================================= */
-
-function setText(id, value) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.textContent = value == null || value === "" ? "-" : value;
-    }
-}
-
-/* =========================================================
-   STATUS TIMELINE
-   ========================================================= */
+/* ================= TIMELINE ================= */
 
 function updateTimeline(status) {
-    const elementIds = [
+    const ids = [
         "timelineReported",
         "timelineAssigned",
         "timelineMaintenance",
@@ -263,177 +238,21 @@ function updateTimeline(status) {
         ["Closed"]
     ];
 
-    let activeIndex = stages.findIndex(stage => stage.includes(status));
+    let active = stages.findIndex(stage => stage.includes(status));
+    if (active < 0) active = 0;
 
-    if (activeIndex < 0) activeIndex = 0;
+    ids.forEach((id, index) => {
+        const el = document.getElementById(id);
+        if (!el) return;
 
-    elementIds.forEach(function (id, index) {
-        const element = document.getElementById(id);
-        if (!element) return;
+        el.classList.remove("completed", "active");
 
-        element.classList.remove("completed", "active");
-
-        if (index < activeIndex) {
-            element.classList.add("completed");
-        } else if (index === activeIndex) {
-            element.classList.add("active", "completed");
-        }
+        if (index < active) el.classList.add("completed");
+        if (index === active) el.classList.add("completed", "active");
     });
 }
 
-/* =========================================================
-   PHOTO FILE NAME DISPLAY
-   ========================================================= */
-
-function setupPhotoNames() {
-    [
-        ["beforeCamera", "beforePhotoName"],
-        ["beforeGallery", "beforePhotoName"],
-        ["afterCamera", "afterPhotoName"],
-        ["afterGallery", "afterPhotoName"],
-        ["issuePhotoCamera", "photoName"],
-        ["issuePhotoGallery", "photoName"]
-    ].forEach(function (pair) {
-        setupPhotoName(pair[0], pair[1]);
-    });
-}
-
-function setupPhotoName(inputId, nameId) {
-    const input = document.getElementById(inputId);
-    const display = document.getElementById(nameId);
-
-    if (!input || !display) return;
-
-    input.addEventListener("change", function () {
-        if (this.files && this.files.length > 0) {
-            display.textContent = this.files[0].name;
-        } else {
-            display.textContent = "";
-        }
-    });
-}
-
-/* =========================================================
-   BEFORE / AFTER EVIDENCE UPLOAD
-   ========================================================= */
-
-function setupEvidenceUpload() {
-    setupEvidenceInput("beforeCamera", "before");
-    setupEvidenceInput("beforeGallery", "before");
-    setupEvidenceInput("afterCamera", "after");
-    setupEvidenceInput("afterGallery", "after");
-}
-
-function setupEvidenceInput(inputId, type) {
-    const input = document.getElementById(inputId);
-    if (!input) return;
-
-    input.addEventListener("change", function () {
-        if (this.files && this.files.length > 0) {
-            uploadEvidence(this.files[0], type);
-        }
-    });
-}
-
-async function uploadEvidence(file, type) {
-    const reportIdInput = document.getElementById("reportId");
-
-    if (!reportIdInput) {
-        alert("Please enter the Report ID first.");
-        return;
-    }
-
-    const reportId = normalizeReportId(reportIdInput.value);
-
-    if (!reportId) {
-        alert("Enter a valid Report ID, for example RR-1, before uploading photos.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("reportId", reportId);
-    formData.append(type === "before" ? "beforePhoto" : "afterPhoto", file);
-
-    try {
-        const response = await fetch(`${API_BASE}/api/evidence/upload`, {
-            method: "POST",
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error(`Photo upload failed (${response.status})`);
-        }
-
-        const evidence = await response.json();
-
-        alert(`${type === "before" ? "Before" : "After"} photo uploaded successfully!`);
-        displayEvidence(evidence);
-        console.log("Evidence saved:", evidence);
-    } catch (error) {
-        console.error("Evidence upload error:", error);
-        alert("Unable to upload photo. Check the backend and Report ID.");
-    }
-}
-
-/* =========================================================
-   LOAD SAVED EVIDENCE
-   ========================================================= */
-
-async function loadEvidence(reportId) {
-    try {
-        const response = await fetch(`${API_BASE}/api/evidence/${reportId}`);
-
-        if (!response.ok) return;
-
-        const evidence = await response.json();
-        if (evidence) displayEvidence(evidence);
-    } catch (error) {
-        console.log("Evidence not available yet.", error);
-    }
-}
-
-function displayEvidence(evidence) {
-    const beforeDisplay = document.getElementById("beforePhotoDisplay");
-    const afterDisplay = document.getElementById("afterPhotoDisplay");
-
-    if (beforeDisplay && evidence.beforePhoto) {
-        beforeDisplay.innerHTML = "";
-
-        const beforeImage = document.createElement("img");
-        beforeImage.src = evidence.beforePhoto;
-        beforeImage.alt = "Before maintenance evidence";
-        beforeImage.style.cssText =
-            "width:100%;height:100%;object-fit:cover;border-radius:8px;";
-
-        beforeDisplay.appendChild(beforeImage);
-    }
-
-    if (afterDisplay && evidence.afterPhoto) {
-        afterDisplay.innerHTML = "";
-
-        const afterImage = document.createElement("img");
-        afterImage.src = evidence.afterPhoto;
-        afterImage.alt = "After maintenance evidence";
-        afterImage.style.cssText =
-            "width:100%;height:100%;object-fit:cover;border-radius:8px;";
-
-        afterDisplay.appendChild(afterImage);
-    }
-
-    if (evidence.beforePhoto) {
-        setText("beforeEvidenceStatus", "Uploaded");
-        setText("beforeVerificationStatus", "Available");
-    }
-
-    if (evidence.afterPhoto) {
-        setText("afterEvidenceStatus", "Uploaded");
-        setText("afterVerificationStatus", "Available");
-    }
-}
-
-/* =========================================================
-   DASHBOARD ISSUE TABLE
-   ========================================================= */
+/* ================= DASHBOARD ISSUES ================= */
 
 async function loadDashboardIssues() {
     const table = document.querySelector(".issue-table tbody");
@@ -441,116 +260,110 @@ async function loadDashboardIssues() {
 
     try {
         const response = await fetch(`${API_BASE}/api/issues`);
-
-        if (!response.ok) {
-            throw new Error(`Could not load issues (${response.status})`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const issues = await response.json();
         table.innerHTML = "";
 
-        if (!Array.isArray(issues) || issues.length === 0) {
+        if (!Array.isArray(issues) || !issues.length) {
             table.innerHTML =
                 '<tr><td colspan="6">No issues reported yet.</td></tr>';
             return;
         }
 
-        issues.forEach(function (issue) {
+        issues.forEach(issue => {
             const row = document.createElement("tr");
 
-            const values = [
+            [
                 `RR-${issue.reportId}`,
                 `${issue.station || "-"} — Platform ${issue.platform || "-"}`,
                 issue.issueType || "-",
                 issue.priority || "Medium",
                 issue.status || "Reported"
-            ];
-
-            values.forEach(function (value) {
+            ].forEach(value => {
                 const cell = document.createElement("td");
                 cell.textContent = value;
                 row.appendChild(cell);
             });
 
-            const actionCell = document.createElement("td");
+            const action = document.createElement("td");
             const link = document.createElement("a");
 
-            link.href = `issue-details.html?id=RR-${encodeURIComponent(issue.reportId)}`;
+            link.href =
+                `issue-details.html?id=RR-${encodeURIComponent(issue.reportId)}`;
+
             link.className = "view-button";
             link.textContent = "View";
 
-            actionCell.appendChild(link);
-            row.appendChild(actionCell);
+            action.appendChild(link);
+            row.appendChild(action);
             table.appendChild(row);
         });
     } catch (error) {
-        console.error("Dashboard issues error:", error);
+        console.error("Dashboard issue loading error:", error);
     }
 }
 
-/* =========================================================
-   DASHBOARD STATISTICS
-   ========================================================= */
+/* ================= DASHBOARD COUNTS ================= */
 
 async function loadDashboardStats() {
     try {
         const response = await fetch(`${API_BASE}/api/issues`);
-
-        if (!response.ok) {
-            throw new Error(`Could not load statistics (${response.status})`);
-        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const issues = await response.json();
         if (!Array.isArray(issues)) return;
 
         const total = issues.length;
 
-        const requiresAction = issues.filter(issue =>
+        const action = issues.filter(issue =>
             ["Reported", "Assigned", "Inspection"].includes(issue.status)
         ).length;
 
-        const underMaintenance = issues.filter(
-            issue => issue.status === "Under Maintenance"
+        const maintenance = issues.filter(issue =>
+            issue.status === "Under Maintenance"
         ).length;
 
-        const resolved = issues.filter(
-            issue => ["Resolved", "Closed"].includes(issue.status)
+        const resolved = issues.filter(issue =>
+            ["Resolved", "Closed"].includes(issue.status)
         ).length;
 
-        const cards = document.querySelectorAll(".dashboard-cards .card h2");
+        const cards = document.querySelectorAll(
+            ".dashboard-cards .card h2"
+        );
 
         if (cards.length >= 4) {
             cards[0].textContent = total;
-            cards[1].textContent = requiresAction;
-            cards[2].textContent = underMaintenance;
+            cards[1].textContent = action;
+            cards[2].textContent = maintenance;
             cards[3].textContent = resolved;
         }
     } catch (error) {
-        console.error("Dashboard statistics error:", error);
+        console.error("Dashboard counts error:", error);
     }
 }
 
-/* =========================================================
-   ISSUE DETAILS PAGE
-   ========================================================= */
+/* ================= ISSUE DETAILS ================= */
 
 async function loadIssueDetails() {
-    const reportIdElement = document.getElementById("detailReportId");
-    if (!reportIdElement) return;
+    if (!document.getElementById("detailReportId")) return;
 
-    const params = new URLSearchParams(window.location.search);
-    const reportId = normalizeReportId(params.get("id"));
+    const id = currentReportId();
 
-    if (!reportId) return;
+    if (!id) {
+        setText("detailReportId", "No Report ID provided");
+        return;
+    }
 
     try {
-        const response = await fetch(`${API_BASE}/api/issues/${reportId}`);
-
-        if (!response.ok) {
-            throw new Error(`Issue not found (${response.status})`);
-        }
+        const response = await fetch(`${API_BASE}/api/issues/${id}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const issue = await response.json();
+
+        if (!issue || issue.reportId == null) {
+            throw new Error("Issue not found");
+        }
 
         setText("detailReportId", `RR-${issue.reportId}`);
         setText("detailStation", issue.station);
@@ -564,14 +377,268 @@ async function loadIssueDetails() {
 
         const select = document.getElementById("issueStatus");
         if (select) select.value = issue.status || "Reported";
+
+        await loadMaintenanceAndEvidence(id);
     } catch (error) {
-        console.error("Issue details error:", error);
+        console.error("Issue details loading error:", error);
+        setText("detailReportId", "Unable to load issue details");
     }
 }
 
-/* =========================================================
-   UPDATE ISSUE STATUS
-   ========================================================= */
+/* ================= LOAD MAINTENANCE AND EVIDENCE ================= */
+
+async function loadMaintenanceAndEvidence(id) {
+    try {
+        const response = await fetch(`${API_BASE}/api/maintenance/${id}`);
+
+        if (response.ok) {
+            const m = await response.json();
+
+            if (m && m.reportId != null) {
+                setText("assignedTeamDisplay", m.assignedTeam || "Not Assigned");
+                setText("assignedOfficerDisplay", m.assignedOfficer || "Awaiting Assignment");
+                setText("maintenanceStatusDisplay", m.maintenanceStatus || "Not Assigned");
+
+                const team = document.getElementById("assignedTeam");
+                const officer = document.getElementById("assignedOfficer");
+                const status = document.getElementById("maintenanceStatus");
+
+                if (team) team.value = m.assignedTeam || "";
+                if (officer) officer.value = m.assignedOfficer || "";
+                if (status && m.maintenanceStatus) {
+                    status.value = m.maintenanceStatus;
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Maintenance load error:", error);
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/api/evidence/${id}`);
+
+        if (response.ok) {
+            const evidence = await response.json();
+            if (evidence) displayEvidence(evidence);
+        }
+    } catch (error) {
+        console.error("Evidence load error:", error);
+    }
+}
+
+/* ================= DISPLAY SAVED EVIDENCE ================= */
+
+function displayEvidence(evidence) {
+    const before = document.getElementById("savedBeforePhoto");
+    const after = document.getElementById("savedAfterPhoto");
+
+    if (before) {
+        before.hidden = !evidence.beforePhoto;
+
+        if (evidence.beforePhoto) {
+            before.src = evidence.beforePhoto;
+        }
+    }
+
+    if (after) {
+        after.hidden = !evidence.afterPhoto;
+
+        if (evidence.afterPhoto) {
+            after.src = evidence.afterPhoto;
+        }
+    }
+}
+
+/* ================= SAVE MAINTENANCE ================= */
+
+function setupMaintenanceForm() {
+    const form = document.getElementById("maintenanceForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const id = currentReportId();
+        const team = document.getElementById("assignedTeam");
+        const officer = document.getElementById("assignedOfficer");
+        const status = document.getElementById("maintenanceStatus");
+        const message = document.getElementById("maintenanceMessage");
+
+        if (!id) {
+            showMessage(message, "Open issue details using a valid Report ID.");
+            return;
+        }
+
+        if (!team?.value.trim() || !officer?.value.trim() || !status?.value) {
+            showMessage(message, "Complete all maintenance fields.");
+            return;
+        }
+
+        try {
+            let existing = null;
+
+            const getResponse = await fetch(
+                `${API_BASE}/api/maintenance/${id}`
+            );
+
+            if (getResponse.ok) {
+                existing = await getResponse.json();
+            }
+
+            const now = new Date().toISOString().slice(0, 19);
+
+            const payload = {
+                reportId: Number(id),
+                assignedTeam: team.value.trim(),
+                assignedOfficer: officer.value.trim(),
+                maintenanceStatus: status.value,
+
+                startedAt: status.value === "Under Maintenance"
+                    ? (existing?.startedAt || now)
+                    : (existing?.startedAt || null),
+
+                completedAt: status.value === "Completed"
+                    ? now
+                    : (existing?.completedAt || null)
+            };
+
+            const response = await fetch(
+                `${API_BASE}/api/maintenance/${id}`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }
+            );
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const saved = await response.json();
+
+            setText("assignedTeamDisplay", saved.assignedTeam);
+            setText("assignedOfficerDisplay", saved.assignedOfficer);
+            setText("maintenanceStatusDisplay", saved.maintenanceStatus);
+
+            showMessage(
+                message,
+                "Maintenance assignment saved successfully.",
+                true
+            );
+        } catch (error) {
+            console.error("Maintenance save error:", error);
+            showMessage(
+                message,
+                "Could not save maintenance. Check backend logs."
+            );
+        }
+    });
+}
+
+/* ================= UPLOAD AND COMPARE PHOTOS ================= */
+
+function setupEvidenceForm() {
+    const upload = document.getElementById("uploadEvidenceButton");
+    const compare = document.getElementById("compareEvidenceButton");
+
+    if (upload) upload.addEventListener("click", uploadEvidence);
+    if (compare) compare.addEventListener("click", compareEvidence);
+}
+
+function getSelectedPhotos() {
+    return {
+        before: document.getElementById("beforePhoto")?.files?.[0],
+        after: document.getElementById("afterPhoto")?.files?.[0]
+    };
+}
+
+async function uploadEvidence() {
+    const id = currentReportId();
+    const message = document.getElementById("evidenceMessage");
+    const photos = getSelectedPhotos();
+
+    if (!id) {
+        showMessage(message, "Open issue details using a valid Report ID.");
+        return;
+    }
+
+    if (!photos.before && !photos.after) {
+        showMessage(message, "Choose at least one photo to upload.");
+        return;
+    }
+
+    const data = new FormData();
+    data.append("reportId", id);
+
+    if (photos.before) data.append("beforePhoto", photos.before);
+    if (photos.after) data.append("afterPhoto", photos.after);
+
+    try {
+        const response = await fetch(`${API_BASE}/api/evidence/upload`, {
+            method: "POST",
+            body: data
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const evidence = await response.json();
+
+        displayEvidence(evidence);
+        showMessage(message, "Evidence saved successfully.", true);
+    } catch (error) {
+        console.error("Evidence upload error:", error);
+        showMessage(
+            message,
+            "Upload failed. Check backend logs and connection."
+        );
+    }
+}
+
+async function compareEvidence() {
+    const message = document.getElementById("comparisonResult");
+    const photos = getSelectedPhotos();
+
+    if (!photos.before || !photos.after) {
+        showMessage(message, "Select both Before and After photos first.");
+        return;
+    }
+
+    const data = new FormData();
+    data.append("beforePhoto", photos.before);
+    data.append("afterPhoto", photos.after);
+
+    const button = document.getElementById("compareEvidenceButton");
+
+    try {
+        if (button) button.disabled = true;
+        showMessage(message, "Comparing photos...");
+
+        const response = await fetch(`${API_BASE}/api/evidence/compare`, {
+            method: "POST",
+            body: data
+        });
+
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const result = await response.json();
+
+        showMessage(
+            message,
+            `Visual difference: ${result.change_percent}%\n` +
+            `${result.note || result.message || "Comparison completed."}`,
+            true
+        );
+    } catch (error) {
+        console.error("Photo comparison error:", error);
+        showMessage(
+            message,
+            "Comparison failed. Check the backend connection."
+        );
+    } finally {
+        if (button) button.disabled = false;
+    }
+}
+
+/* ================= UPDATE ISSUE STATUS ================= */
 
 function setupIssueDetailsStatus() {
     const button = document.getElementById("updateStatusButton");
@@ -579,37 +646,66 @@ function setupIssueDetailsStatus() {
 
     if (!button || !select) return;
 
-    button.addEventListener("click", async function () {
-        const params = new URLSearchParams(window.location.search);
-        const reportId = normalizeReportId(params.get("id"));
+    button.addEventListener("click", async () => {
+        const id = currentReportId();
 
-        if (!reportId) {
-            alert("No valid Report ID found.");
+        if (!id) {
+            alert("No valid Report ID found. Open View from Dashboard.");
             return;
+        }
+
+        const requestedStatus = select.value;
+
+        if (["Resolved", "Closed"].includes(requestedStatus)) {
+            try {
+                const response = await fetch(`${API_BASE}/api/evidence/${id}`);
+                const evidence = response.ok ? await response.json() : null;
+
+                if (!evidence?.afterPhoto) {
+                    alert(
+                        "Upload After evidence before marking the issue Resolved or Closed."
+                    );
+                    return;
+                }
+
+                if (!confirm(
+                    "Confirm that an authorised officer has verified the repair?"
+                )) {
+                    return;
+                }
+            } catch (error) {
+                console.error("Evidence verification error:", error);
+                alert("Could not verify saved evidence. Try again.");
+                return;
+            }
         }
 
         try {
             const response = await fetch(
-                `${API_BASE}/api/issues/${reportId}/status?status=${encodeURIComponent(select.value)}`,
+                `${API_BASE}/api/issues/${id}/status?status=${encodeURIComponent(requestedStatus)}`,
                 { method: "PUT" }
             );
 
-            if (!response.ok) {
-                throw new Error(`Status update failed (${response.status})`);
-            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const issue = await response.json();
 
+            if (!issue || issue.reportId == null) {
+                throw new Error("Issue not found");
+            }
+
             setText("detailStatus", issue.status);
             setText("detailReportStatus", issue.status);
+            select.value = issue.status;
+
+            await loadIssueDetails();
+            await loadDashboardIssues();
+            await loadDashboardStats();
 
             alert(`Issue status updated to: ${issue.status}`);
         } catch (error) {
             console.error("Status update error:", error);
-            alert("Unable to update issue status. Check the backend.");
+            alert("Unable to update issue status. Please try again.");
         }
     });
 }
-
-
-
