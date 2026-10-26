@@ -1,636 +1,289 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Officer Dashboard | RailSafe</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
 
-
 <body>
-
-
-    <!-- ================= NAVBAR ================= -->
-
     <nav class="navbar">
-
-        <div class="logo">
-            <span>Rail</span>Safe
-        </div>
-
+        <div class="logo"><span>Rail</span>Safe</div>
         <div class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="report.html">
-                Report Issue
-            </a>
-
-            <a href="track.html">
-                Track Issue
-            </a>
-
-            <a href="dashboard.html" class="active">
-                Officer Dashboard
-            </a>
-
-            <a href="login.html">
-                Logout
-            </a>
-
+            <a href="index.html">Home</a>
+            <a href="report.html">Report Issue</a>
+            <a href="track.html">Track Issue</a>
+            <a href="dashboard.html" class="active">Officer Dashboard</a>
+            <a href="login.html">Logout</a>
         </div>
-
     </nav>
-
-
-
-    <!-- ================= DASHBOARD ================= -->
 
     <main class="dashboard-page">
 
-
-        <!-- PAGE HEADER -->
-
         <div class="dashboard-header">
-
             <div>
-
-                <p class="section-label">
-                    MAINTENANCE CONTROL CENTRE
-                </p>
-
-                <h1>
-                    Officer Dashboard
-                </h1>
-
-                <p>
-                    Monitor reported infrastructure issues, assign
-                    maintenance work and verify repair evidence.
-                </p>
-
+                <p class="section-label">MAINTENANCE CONTROL CENTRE</p>
+                <h1>Officer Dashboard</h1>
+                <p>Monitor actual reports, review maintenance status and track railway infrastructure repairs.</p>
             </div>
-
-
             <div class="dashboard-date">
-
-                <span>
-                    SYSTEM STATUS
-                </span>
-
-                <strong>
-                    ● Operational
-                </strong>
-
+                <span>SYSTEM STATUS</span>
+                <strong>● Live Dashboard</strong>
             </div>
-
         </div>
 
-
-
-        <!-- ================= SUMMARY CARDS ================= -->
-
+        <!-- LIVE SUMMARY CARDS -->
         <div class="dashboard-cards">
-
-
             <div class="card">
-
-                <span class="card-label">
-                    TOTAL ISSUES
-                </span>
-
-                <h2>
-                    156
-                </h2>
-
-                <p>
-                    Reported infrastructure issues
-                </p>
-
+                <span class="card-label">TOTAL ISSUES</span>
+                <h2 id="totalIssues">—</h2>
+                <p>Total submitted reports</p>
             </div>
 
-
-
             <div class="card">
-
-                <span class="card-label">
-                    REQUIRES ACTION
-                </span>
-
-                <h2>
-                    41
-                </h2>
-
-                <p>
-                    Issues awaiting assignment
-                </p>
-
+                <span class="card-label">REQUIRES ACTION</span>
+                <h2 id="actionIssues">—</h2>
+                <p>Reports awaiting action</p>
             </div>
 
-
-
             <div class="card">
-
-                <span class="card-label">
-                    UNDER MAINTENANCE
-                </span>
-
-                <h2>
-                    27
-                </h2>
-
-                <p>
-                    Repair work currently active
-                </p>
-
+                <span class="card-label">UNDER MAINTENANCE</span>
+                <h2 id="activeIssues">—</h2>
+                <p>Repair work in progress</p>
             </div>
 
-
-
             <div class="card">
-
-                <span class="card-label">
-                    RESOLVED
-                </span>
-
-                <h2>
-                    72
-                </h2>
-
-                <p>
-                    Issues successfully resolved
-                </p>
-
+                <span class="card-label">RESOLVED</span>
+                <h2 id="resolvedIssues">—</h2>
+                <p>Completed reports</p>
             </div>
-
-
         </div>
 
-
-
-        <!-- ================= ISSUE MANAGEMENT ================= -->
-
+        <!-- LIVE ISSUES TABLE -->
         <section class="dashboard-section">
-
-
             <div class="section-heading">
-
                 <div>
-
-                    <p class="section-label">
-                        ISSUE MANAGEMENT
-                    </p>
-
-                    <h2>
-                        Recent Maintenance Reports
-                    </h2>
-
+                    <p class="section-label">ISSUE MANAGEMENT</p>
+                    <h2>Reported Infrastructure Issues</h2>
+                    <p>Reports submitted by users appear here automatically.</p>
                 </div>
-
-
-                <button
-                    type="button"
-                    class="track-button"
-                >
-                    View All Issues
+                <button type="button" class="track-button"
+                        onclick="loadLiveDashboard()">
+                    Refresh Reports
                 </button>
-
             </div>
-
-
-
-            <!-- ISSUE TABLE -->
 
             <div class="issue-table-container">
-
                 <table class="issue-table">
-
                     <thead>
-
                         <tr>
-
-                            <th>
-                                Report ID
-                            </th>
-
-                            <th>
-                                Location
-                            </th>
-
-                            <th>
-                                Issue
-                            </th>
-
-                            <th>
-                                Priority
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
+                            <th>Report ID</th>
+                            <th>Location</th>
+                            <th>Issue</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
-
                     </thead>
-
-
-                    <tbody>
-
-
-                        <!-- ISSUE 1 -->
-
+                    <tbody id="issuesTableBody">
                         <tr>
-
-                            <td>
-                                <strong>
-                                    RR-1001
-                                </strong>
-                            </td>
-
-                            <td>
-                                Dadar<br>
-                                <small>
-                                    Platform 3
-                                </small>
-                            </td>
-
-                            <td>
-                                Damaged Platform Surface
-                            </td>
-
-                            <td>
-
-                                <span class="priority-badge critical">
-                                    Critical
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <span class="status-badge">
-                                    Under Maintenance
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <a
-                                    href="issue-details.html?id=RR-1001"
-                                    class="view-button"
-                                >
-                                    View
-                                </a>
-
-                            </td>
-
+                            <td colspan="6">Loading reports...</td>
                         </tr>
-
-
-
-                        <!-- ISSUE 2 -->
-
-                        <tr>
-
-                            <td>
-                                <strong>
-                                    RR-1002
-                                </strong>
-                            </td>
-
-                            <td>
-                                Parel<br>
-                                <small>
-                                    Platform 2
-                                </small>
-                            </td>
-
-                            <td>
-                                Damaged Safety Barrier
-                            </td>
-
-                            <td>
-
-                                <span class="priority-badge high">
-                                    High
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <span class="status-badge">
-                                    Assigned
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <a
-                                    href="issue-details.html?id=RR-1002"
-                                    class="view-button"
-                                >
-                                    View
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- ISSUE 3 -->
-
-                        <tr>
-
-                            <td>
-                                <strong>
-                                    RR-1003
-                                </strong>
-                            </td>
-
-                            <td>
-                                Kurla<br>
-                                <small>
-                                    Platform 1
-                                </small>
-                            </td>
-
-                            <td>
-                                Lighting Failure
-                            </td>
-
-                            <td>
-
-                                <span class="priority-badge medium">
-                                    Medium
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <span class="status-badge">
-                                    Inspection
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <a
-                                    href="issue-details.html?id=RR-1003"
-                                    class="view-button"
-                                >
-                                    View
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- ISSUE 4 -->
-
-                        <tr>
-
-                            <td>
-                                <strong>
-                                    RR-1004
-                                </strong>
-                            </td>
-
-                            <td>
-                                Thane<br>
-                                <small>
-                                    Platform 5
-                                </small>
-                            </td>
-
-                            <td>
-                                Water Leakage
-                            </td>
-
-                            <td>
-
-                                <span class="priority-badge high">
-                                    High
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <span class="status-badge">
-                                    Resolved
-                                </span>
-
-                            </td>
-
-                            <td>
-
-                                <a
-                                    href="issue-details.html?id=RR-1004"
-                                    class="view-button"
-                                >
-                                    View
-                                </a>
-
-                            </td>
-
-                        </tr>
-
-
                     </tbody>
-
                 </table>
-
             </div>
-
         </section>
 
-
-
-        <!-- ================= MAINTENANCE WORKFLOW ================= -->
-
-        <section class="dashboard-section">
-
-
+        <!-- LIVE MAINTENANCE RECORDS -->
+        <section class="dashboard-section maintenance-section">
             <div class="section-heading">
-
                 <div>
-
-                    <p class="section-label">
-                        MAINTENANCE WORKFLOW
-                    </p>
-
-                    <h2>
-                        Issue Verification Process
-                    </h2>
-
+                    <p class="section-label">MAINTENANCE CONTROL</p>
+                    <h2>Maintenance Records</h2>
+                    <p>Assigned teams, officers and current repair status.</p>
                 </div>
-
             </div>
 
+            <div id="maintenanceRecords">
+                Loading maintenance records...
+            </div>
+        </section>
+
+        <!-- WORKFLOW -->
+        <section class="dashboard-section">
+            <div class="section-heading">
+                <div>
+                    <p class="section-label">MAINTENANCE WORKFLOW</p>
+                    <h2>Issue Verification Process</h2>
+                </div>
+            </div>
 
             <div class="workflow-grid">
-
-
                 <div class="workflow-card">
-
-                    <span class="workflow-number">
-                        01
-                    </span>
-
-                    <h3>
-                        Reported
-                    </h3>
-
-                    <p>
-                        Employee submits an issue with location
-                        and evidence photograph.
-                    </p>
-
+                    <span class="workflow-number">01</span>
+                    <h3>Reported</h3>
+                    <p>A user submits an infrastructure issue with its location and details.</p>
                 </div>
 
-
-
                 <div class="workflow-card">
-
-                    <span class="workflow-number">
-                        02
-                    </span>
-
-                    <h3>
-                        Assigned
-                    </h3>
-
-                    <p>
-                        Officer assigns the issue to the responsible
-                        maintenance team.
-                    </p>
-
+                    <span class="workflow-number">02</span>
+                    <h3>Assigned</h3>
+                    <p>An officer assigns the issue to the responsible maintenance team.</p>
                 </div>
 
-
-
                 <div class="workflow-card">
-
-                    <span class="workflow-number">
-                        03
-                    </span>
-
-                    <h3>
-                        Maintenance
-                    </h3>
-
-                    <p>
-                        Maintenance team inspects and repairs
-                        the reported infrastructure.
-                    </p>
-
+                    <span class="workflow-number">03</span>
+                    <h3>Maintenance</h3>
+                    <p>The maintenance team inspects and repairs the reported issue.</p>
                 </div>
 
-
-
                 <div class="workflow-card">
-
-                    <span class="workflow-number">
-                        04
-                    </span>
-
-                    <h3>
-                        Evidence Verification
-                    </h3>
-
-                    <p>
-                        Before and After evidence is checked
-                        before the issue is marked resolved.
-                    </p>
-
+                    <span class="workflow-number">04</span>
+                    <h3>Verification</h3>
+                    <p>Repair evidence is reviewed before the issue is closed.</p>
                 </div>
-
-
             </div>
-
         </section>
 
-
-
-        <!-- ================= VERIFICATION ALERT ================= -->
-
-        <section class="verification-alert">
-
-            <div>
-
-                <p class="section-label">
-                    ACTION REQUIRED
-                </p>
-
-                <h2>
-                    Maintenance Evidence Verification
-                </h2>
-
-                <p>
-                    Issues should not be marked as resolved only by
-                    changing their status. The responsible officer
-                    must review the maintenance evidence before closure.
-                </p>
-
-            </div>
-
-
-            <a
-                href="issue-details.html?id=RR-1001"
-                class="track-button"
-            >
-                Review Evidence
-            </a>
-
-        </section>
-
-
+        <div id="dashboardMessage" role="status"></div>
     </main>
 
-
-
-    <!-- ================= FOOTER ================= -->
-
     <footer>
-
-        <strong>
-            RailSafe
-        </strong>
-
-        <p>
-            Railway Maintenance Management System
-        </p>
-
-        <p>
-            © 2026 RailSafe. All Rights Reserved.
-        </p>
-
+        <strong>RailSafe</strong>
+        <p>Railway Maintenance Management System</p>
+        <p>© 2026 RailSafe. All Rights Reserved.</p>
     </footer>
-
-
 
     <script src="script.js"></script>
 
-</body>
+    <!-- Dashboard-specific live API loading -->
+    <script>
+        async function loadLiveDashboard() {
+            const issuesBody = document.getElementById("issuesTableBody");
+            const maintenanceBox = document.getElementById("maintenanceRecords");
+            const message = document.getElementById("dashboardMessage");
 
+            issuesBody.innerHTML =
+                '<tr><td colspan="6">Loading reports...</td></tr>';
+            maintenanceBox.textContent = "Loading maintenance records...";
+            message.textContent = "";
+
+            try {
+                const [issuesResponse, maintenanceResponse] = await Promise.all([
+                    fetch(`${API_BASE}/api/issues`),
+                    fetch(`${API_BASE}/api/maintenance`)
+                ]);
+
+                if (!issuesResponse.ok || !maintenanceResponse.ok) {
+                    throw new Error("The server could not load dashboard data.");
+                }
+
+                const [issues, maintenance] = await Promise.all([
+                    issuesResponse.json(),
+                    maintenanceResponse.json()
+                ]);
+
+                const normalizedStatus = value =>
+                    String(value || "").trim().toLowerCase();
+
+                const isResolved = status =>
+                    ["resolved", "closed"].includes(normalizedStatus(status));
+
+                const isUnderMaintenance = status =>
+                    normalizedStatus(status) === "under maintenance";
+
+                const needsAction = status =>
+                    !isResolved(status) && !isUnderMaintenance(status);
+
+                document.getElementById("totalIssues").textContent = issues.length;
+                document.getElementById("actionIssues").textContent =
+                    issues.filter(issue => needsAction(issue.status)).length;
+                document.getElementById("activeIssues").textContent =
+                    issues.filter(issue => isUnderMaintenance(issue.status)).length;
+                document.getElementById("resolvedIssues").textContent =
+                    issues.filter(issue => isResolved(issue.status)).length;
+
+                issuesBody.replaceChildren();
+
+                if (issues.length === 0) {
+                    const row = issuesBody.insertRow();
+                    const cell = row.insertCell();
+                    cell.colSpan = 6;
+                    cell.textContent = "No reports have been submitted yet.";
+                }
+
+                issues.forEach(issue => {
+                    const row = issuesBody.insertRow();
+
+                    const reportCell = row.insertCell();
+                    const reportLink = document.createElement("a");
+                    reportLink.href =
+                        `issue-details.html?id=${encodeURIComponent("RR-" + issue.reportId)}`;
+                    reportLink.textContent = "RR-" + issue.reportId;
+                    reportLink.style.fontWeight = "bold";
+                    reportCell.appendChild(reportLink);
+
+                    row.insertCell().textContent =
+                        `${issue.station || "N/A"} — Platform ${issue.platform || "N/A"}`;
+
+                    row.insertCell().textContent = issue.issueType || "N/A";
+                    row.insertCell().textContent = issue.priority || "Not set";
+                    row.insertCell().textContent = issue.status || "Reported";
+
+                    const actionCell = row.insertCell();
+                    const viewLink = document.createElement("a");
+                    viewLink.href =
+                        `issue-details.html?id=${encodeURIComponent("RR-" + issue.reportId)}`;
+                    viewLink.className = "view-button";
+                    viewLink.textContent = "View";
+                    actionCell.appendChild(viewLink);
+                });
+
+                maintenanceBox.replaceChildren();
+
+                if (maintenance.length === 0) {
+                    maintenanceBox.textContent =
+                        "No maintenance records are available yet.";
+                }
+
+                maintenance.forEach(record => {
+                    const card = document.createElement("div");
+                    card.className = "maintenance-card";
+
+                    [
+                        `Report: RR-${record.reportId ?? "N/A"}`,
+                        `Status: ${record.maintenanceStatus || "Awaiting Assignment"}`,
+                        `Team: ${record.assignedTeam || "Not assigned"}`,
+                        `Officer: ${record.assignedOfficer || "Not assigned"}`
+                    ].forEach(text => {
+                        const paragraph = document.createElement("p");
+                        paragraph.textContent = text;
+                        card.appendChild(paragraph);
+                    });
+
+                    maintenanceBox.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Dashboard loading error:", error);
+
+                issuesBody.replaceChildren();
+                const row = issuesBody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 6;
+                cell.textContent =
+                    "Could not load reports. Check the server connection and try again.";
+
+                maintenanceBox.textContent =
+                    "Could not load maintenance records. Please try again.";
+
+                message.textContent = error.message;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", loadLiveDashboard);
+    </script>
+</body>
 </html>

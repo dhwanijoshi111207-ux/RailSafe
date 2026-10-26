@@ -2,397 +2,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RailSafe - Track Issue</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f6fb;
-      color: #172033;
-    }
-
-    nav {
-      background: #102746;
-      color: white;
-      padding: 18px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    nav h2 {
-      margin: 0;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 16px;
-    }
-
-    .container {
-      max-width: 950px;
-      margin: 30px auto;
-      padding: 0 16px;
-    }
-
-    .card {
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
-      margin-bottom: 22px;
-      box-shadow: 0 3px 14px #152b4610;
-    }
-
-    h1, h2, h3 {
-      color: #102746;
-    }
-
-    input[type="text"],
-    input[type="file"] {
-      display: block;
-      width: 100%;
-      margin: 12px 0;
-    }
-
-    input[type="text"] {
-      padding: 12px;
-      border: 1px solid #ccd5e0;
-      border-radius: 6px;
-    }
-
-    button {
-      background: #1264a3;
-      color: white;
-      border: 0;
-      padding: 12px 18px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 5px 5px 5px 0;
-    }
-
-    button:hover {
-      background: #0b4778;
-    }
-
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .photo-box {
-      border: 1px solid #dce3ed;
-      border-radius: 10px;
-      padding: 16px;
-      min-width: 0;
-    }
-
-    .photo-box img {
-      display: block;
-      width: 100%;
-      height: 220px;
-      object-fit: contain;
-      background: #f1f4f8;
-      border-radius: 8px;
-      margin-top: 12px;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 7px 12px;
-      background: #e4f5e9;
-      color: #176536;
-      border-radius: 20px;
-      font-weight: bold;
-    }
-
-    .timeline {
-      border-left: 3px solid #1264a3;
-      margin: 20px 0 0 8px;
-      padding-left: 22px;
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 24px;
-    }
-
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      left: -30px;
-      top: 4px;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #1264a3;
-    }
-
-    .muted {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    #message {
-      margin-top: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 600px) {
-      .photo-grid {
-        grid-template-columns: 1fr;
-      }
-
-      nav {
-        align-items: flex-start;
-      }
-
-      nav a {
-        margin: 0 10px 0 0;
-      }
-
-      .card {
-        padding: 18px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Issue | RailSafe</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .track-panel {
+            max-width: 950px;
+            margin: 24px auto;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px #00000012;
+        }
+        .track-form, .photo-grid, .track-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .track-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .track-field input {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .track-button {
+            padding: 12px 18px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+        .track-result {
+            margin-top: 14px;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+        .photo-preview {
+            display: block;
+            max-width: 100%;
+            max-height: 260px;
+            object-fit: contain;
+            margin-top: 12px;
+        }
+        [hidden] { display: none !important; }
+    </style>
 </head>
-
 <body>
-  <nav>
-    <h2>RailSafe</h2>
-    <div>
-      <a href="index.html">Home</a>
-      <a href="report.html">Report Issue</a>
-      <a href="track.html">Track Issue</a>
-      <a href="login.html">Employee Login</a>
+
+<nav class="navbar">
+    <div class="logo"><span>Rail</span>Safe</div>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="report.html">Report Issue</a>
+        <a href="track.html">Track Issue</a>
+        <a href="dashboard.html">Officer Dashboard</a>
+        <a href="login.html">Login</a>
     </div>
-  </nav>
+</nav>
 
-  <main class="container">
-    <h1>Track Railway Issue</h1>
-    <p>Check your reported issue and maintenance progress.</p>
+<main class="track-page">
+    <header class="page-header">
+        <p class="hero-label">RAILSAFE TRACKING SYSTEM</p>
+        <h1>Track Your Issue</h1>
+        <p>Check the current status of a reported railway infrastructure issue.</p>
+    </header>
 
-    <section class="card">
-      <h2>Find Your Issue</h2>
+    <section class="track-panel">
+        <h2>Find Report</h2>
+        <form id="trackForm">
+            <label class="track-field" for="reportId">
+                Enter Report ID
+                <input
+                    type="text"
+                    id="reportId"
+                    placeholder="Example: RR-1"
+                    required
+                >
+            </label>
+            <button type="submit" class="primary-button track-button">
+                Track Issue
+            </button>
+        </form>
 
-      <form id="trackForm">
-        <label for="reportId">Report ID</label>
-        <input
-          type="text"
-          id="reportId"
-          name="reportId"
-          placeholder="Enter your Report ID"
-          required
+        <div id="trackResult" hidden>
+            <h2 id="trackIssueHeading">Issue Details</h2>
+            <div class="track-details">
+                <div><strong>Report ID</strong><p id="trackReportId">-</p></div>
+                <div><strong>Station</strong><p id="trackStation">-</p></div>
+                <div><strong>Platform</strong><p id="trackPlatform">-</p></div>
+                <div><strong>Infrastructure</strong><p id="trackInfrastructure">-</p></div>
+                <div><strong>Current Status</strong><p id="trackStatus">-</p></div>
+                <div><strong>Location</strong><p id="trackLocation">-</p></div>
+            </div>
+            <p><strong>Issue Description</strong></p>
+            <p id="trackDescription">-</p>
+            <p><strong>Issue Type</strong></p>
+            <p id="trackIssueDetected">-</p>
+
+            <div class="track-details">
+                <div id="timelineReported">1. Reported</div>
+                <div id="timelineAssigned">2. Assigned / Inspection</div>
+                <div id="timelineMaintenance">3. Under Maintenance</div>
+                <div id="timelineResolved">4. Resolved</div>
+                <div id="timelineClosed">5. Closed</div>
+            </div>
+
+            <p>
+                For maintenance assignment and saved evidence, open the
+                corresponding issue from the Officer Dashboard.
+            </p>
+        </div>
+    </section>
+
+    <section class="track-panel">
+        <p class="hero-label">COMPUTER VISION</p>
+        <h2>Compare Before and After Photos</h2>
+        <p>
+            Upload the original issue photo and the photo taken after maintenance.
+            RailSafe will calculate a visual-difference percentage. An officer
+            must still verify that the repair is actually complete.
+        </p>
+
+        <div class="photo-grid">
+            <label class="track-field" for="beforePhoto">
+                Before Photo
+                <input type="file" id="beforePhoto" accept="image/*" required>
+                <span id="beforePhotoName"></span>
+                <img id="beforePreview" class="photo-preview" alt="Before photo preview" hidden>
+            </label>
+
+            <label class="track-field" for="afterPhoto">
+                After Photo
+                <input type="file" id="afterPhoto" accept="image/*" required>
+                <span id="afterPhotoName"></span>
+                <img id="afterPreview" class="photo-preview" alt="After photo preview" hidden>
+            </label>
+        </div>
+
+        <button
+            type="button"
+            class="primary-button track-button"
+            id="compareEvidenceButton"
         >
-        <button type="submit">Track Issue</button>
-      </form>
+            Compare Two Photos
+        </button>
 
-      <div id="trackResult" aria-live="polite"></div>
-      <p id="message" aria-live="polite"></p>
+        <p id="comparisonResult" class="track-result" role="status" aria-live="polite"></p>
     </section>
+</main>
 
-    <section class="card">
-      <h2>Issue Details</h2>
-      <p><strong>Report ID:</strong> <span id="detailReportId">—</span></p>
-      <p><strong>Station:</strong> <span id="detailStation">—</span></p>
-      <p><strong>Location:</strong> <span id="detailLocation">—</span></p>
-      <p><strong>Issue:</strong> <span id="detailIssue">—</span></p>
-      <p><strong>Severity:</strong> <span id="detailSeverity">—</span></p>
-      <p><strong>Status:</strong> <span class="status" id="detailStatus">Not loaded</span></p>
-    </section>
+<footer>
+    <div class="footer-logo">RailSafe</div>
+    <p>Railway Maintenance Management System</p>
+    <p>© 2026 RailSafe. Maintenance Operations Portal.</p>
+</footer>
 
-    <section class="card">
-      <h2>Before & After Maintenance Photos</h2>
-      <p class="muted">
-        Select the photos and upload them against your Report ID.
-      </p>
+<script src="script.js"></script>
+<script>
+    // Show selected images before comparison.
+    [
+        ["beforePhoto", "beforePreview"],
+        ["afterPhoto", "afterPreview"]
+    ].forEach(([inputId, previewId]) => {
+        const input = document.getElementById(inputId);
+        const preview = document.getElementById(previewId);
 
-      <div class="photo-grid">
-        <div class="photo-box">
-          <h3>Before Photo</h3>
-          <label for="beforeCamera">Take a photo</label>
-          <input type="file" id="beforeCamera" accept="image/*" capture="environment">
+        input.addEventListener("change", () => {
+            const file = input.files && input.files[0];
 
-          <label for="beforeGallery">Choose from gallery</label>
-          <input type="file" id="beforeGallery" accept="image/*">
+            if (!file) {
+                preview.removeAttribute("src");
+                preview.hidden = true;
+                return;
+            }
 
-          <img id="beforePhotoDisplay" alt="Before maintenance photo">
-          <p id="beforeEvidenceStatus" class="muted">No before photo loaded.</p>
-        </div>
+            if (!file.type.startsWith("image/")) {
+                alert("Please select a valid image file.");
+                input.value = "";
+                preview.hidden = true;
+                return;
+            }
 
-        <div class="photo-box">
-          <h3>After Photo</h3>
-          <label for="afterCamera">Take a photo</label>
-          <input type="file" id="afterCamera" accept="image/*" capture="environment">
-
-          <label for="afterGallery">Choose from gallery</label>
-          <input type="file" id="afterGallery" accept="image/*">
-
-          <img id="afterPhotoDisplay" alt="After maintenance photo">
-          <p id="afterEvidenceStatus" class="muted">No after photo loaded.</p>
-        </div>
-      </div>
-
-      <button type="button" id="uploadEvidenceBtn">
-        Upload Before / After Photos
-      </button>
-      <p id="evidenceMessage" aria-live="polite"></p>
-    </section>
-
-    <section class="card">
-      <h2>Maintenance Timeline</h2>
-      <div class="timeline" id="issueTimeline">
-        <div class="timeline-item">Issue Reported</div>
-        <div class="timeline-item">Assigned to Department</div>
-        <div class="timeline-item">Under Maintenance</div>
-        <div class="timeline-item">Resolved</div>
-      </div>
-    </section>
-  </main>
-
-  <script src="script.js"></script>
-
-  <script>
-    const API_BASE = "https://railsafe-2.onrender.com";
-
-    const beforeCamera = document.getElementById("beforeCamera");
-    const beforeGallery = document.getElementById("beforeGallery");
-    const afterCamera = document.getElementById("afterCamera");
-    const afterGallery = document.getElementById("afterGallery");
-
-    function getSelectedFile(cameraInput, galleryInput) {
-      return galleryInput.files[0] || cameraInput.files[0] || null;
-    }
-
-    function previewPhoto(file, imageId, statusId) {
-      if (!file) return;
-
-      const image = document.getElementById(imageId);
-      const status = document.getElementById(statusId);
-
-      image.src = URL.createObjectURL(file);
-      status.textContent = "Selected: " + file.name;
-    }
-
-    beforeCamera.addEventListener("change", () => {
-      if (beforeCamera.files[0]) beforeGallery.value = "";
-      previewPhoto(
-        getSelectedFile(beforeCamera, beforeGallery),
-        "beforePhotoDisplay",
-        "beforeEvidenceStatus"
-      );
-    });
-
-    beforeGallery.addEventListener("change", () => {
-      if (beforeGallery.files[0]) beforeCamera.value = "";
-      previewPhoto(
-        getSelectedFile(beforeCamera, beforeGallery),
-        "beforePhotoDisplay",
-        "beforeEvidenceStatus"
-      );
-    });
-
-    afterCamera.addEventListener("change", () => {
-      if (afterCamera.files[0]) afterGallery.value = "";
-      previewPhoto(
-        getSelectedFile(afterCamera, afterGallery),
-        "afterPhotoDisplay",
-        "afterEvidenceStatus"
-      );
-    });
-
-    afterGallery.addEventListener("change", () => {
-      if (afterGallery.files[0]) afterCamera.value = "";
-      previewPhoto(
-        getSelectedFile(afterCamera, afterGallery),
-        "afterPhotoDisplay",
-        "afterEvidenceStatus"
-      );
-    });
-
-    document.getElementById("uploadEvidenceBtn").addEventListener("click", async () => {
-      const reportId = document.getElementById("reportId").value.trim();
-      const beforeFile = getSelectedFile(beforeCamera, beforeGallery);
-      const afterFile = getSelectedFile(afterCamera, afterGallery);
-      const message = document.getElementById("evidenceMessage");
-
-      if (!reportId) {
-        message.textContent = "Enter the Report ID first.";
-        return;
-      }
-
-      if (!beforeFile || !afterFile) {
-        message.textContent = "Please select both Before and After photos.";
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append("reportId", reportId);
-      formData.append("beforePhoto", beforeFile);
-      formData.append("afterPhoto", afterFile);
-
-      message.textContent = "Uploading photos...";
-
-      try {
-        const response = await fetch(API_BASE + "/api/evidence/upload", {
-          method: "POST",
-          body: formData
+            preview.src = URL.createObjectURL(file);
+            preview.hidden = false;
         });
-
-        if (!response.ok) {
-          throw new Error("Upload failed (" + response.status + ").");
-        }
-
-        message.textContent = "Photos uploaded successfully.";
-        document.getElementById("beforeEvidenceStatus").textContent = "Before photo uploaded.";
-        document.getElementById("afterEvidenceStatus").textContent = "After photo uploaded.";
-      } catch (error) {
-        message.textContent =
-          "Could not upload photos. Check the Report ID and backend logs, then try again.";
-      }
     });
+</script>
 
-    async function loadEvidence(reportId) {
-      try {
-        const response = await fetch(
-          API_BASE + "/api/evidence/" + encodeURIComponent(reportId)
-        );
-
-        if (!response.ok) return;
-
-        const evidence = await response.json();
-        if (!evidence) return;
-
-        if (evidence.beforePhoto) {
-          document.getElementById("beforePhotoDisplay").src = evidence.beforePhoto;
-          document.getElementById("beforeEvidenceStatus").textContent = "Before photo loaded.";
-        }
-
-        if (evidence.afterPhoto) {
-          document.getElementById("afterPhotoDisplay").src = evidence.afterPhoto;
-          document.getElementById("afterEvidenceStatus").textContent = "After photo loaded.";
-        }
-      } catch (error) {
-        console.error("Unable to load evidence:", error);
-      }
-    }
-
-    document.getElementById("trackForm").addEventListener("submit", () => {
-      const reportId = document.getElementById("reportId").value.trim();
-      if (reportId) loadEvidence(reportId);
-    });
-  </script>
 </body>
 </html>
-
