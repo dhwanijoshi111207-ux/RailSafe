@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +17,7 @@
     </style>
 </head>
 <body>
+
 <nav class="navbar">
     <div class="logo"><span>Rail</span>Safe</div>
     <div class="nav-links">
@@ -38,109 +39,10 @@
     <section class="rs-card">
         <p class="card-label">REPORT ID</p>
         <h2 id="detailReportId">Loading...</h2>
+
         <div class="rs-grid">
             <div><span>Station</span><p id="detailStation">Loading...</p></div>
             <div><span>Platform</span><p id="detailPlatform">Loading...</p></div>
             <div><span>Infrastructure</span><p id="detailIssueType">Loading...</p></div>
             <div><span>Priority</span><p id="detailPriority">Loading...</p></div>
-            <div><span>Current Status</span><p id="detailStatus">Loading...</p></div>
-            <div><span>Description</span><p id="detailReportedIssue">Loading...</p></div>
-        </div>
-        <p>Location: <strong id="detailLocation">Loading...</strong></p>
-        <p>Report status: <strong id="detailReportStatus">Loading...</strong></p>
-    </section>
-
-    <section class="rs-card">
-        <p class="hero-label">MAINTENANCE WORKFLOW</p>
-        <h2>Maintenance Assignment</h2>
-        <div class="rs-grid">
-            <div><span>Assigned Team</span><p id="assignedTeamDisplay">Not Assigned</p></div>
-            <div><span>Responsible Officer</span><p id="assignedOfficerDisplay">Awaiting Assignment</p></div>
-            <div><span>Maintenance Status</span><p id="maintenanceStatusDisplay">Not Assigned</p></div>
-        </div>
-
-        <form id="maintenanceForm">
-            <div class="rs-grid">
-                <label class="rs-field">Assigned Team
-                    <input id="assignedTeam" required placeholder="e.g. Electrical Team">
-                </label>
-                <label class="rs-field">Assigned Officer
-                    <input id="assignedOfficer" required placeholder="Officer name">
-                </label>
-                <label class="rs-field">Maintenance Status
-                    <select id="maintenanceStatus" required>
-                        <option value="Assigned">Assigned</option>
-                        <option value="Inspection">Inspection</option>
-                        <option value="Under Maintenance">Under Maintenance</option>
-                        <option value="Completed">Completed</option>
-                    </select>
-                </label>
-            </div>
-            <button class="primary-button rs-button" type="submit">Save Maintenance Assignment</button>
-            <p id="maintenanceMessage" class="rs-result" role="status"></p>
-        </form>
-    </section>
-
-    <section class="rs-card">
-        <p class="hero-label">EVIDENCE VERIFICATION</p>
-        <h2>Before and After Photos</h2>
-        <p>Select photos for this issue. Upload saves them to the Evidence table; comparison reports visual differences only.</p>
-
-        <div class="rs-grid">
-            <label class="rs-field">Before Photo
-                <input type="file" id="beforePhoto" accept="image/*">
-                <span id="beforePhotoName"></span>
-            </label>
-            <label class="rs-field">After Photo
-                <input type="file" id="afterPhoto" accept="image/*">
-                <span id="afterPhotoName"></span>
-            </label>
-        </div>
-
-        <button type="button" class="primary-button rs-button" id="uploadEvidenceButton">Upload Evidence Photos</button>
-        <button type="button" class="primary-button rs-button" id="compareEvidenceButton">Compare Two Photos</button>
-        <p id="evidenceMessage" class="rs-result" role="status"></p>
-        <p id="comparisonResult" class="rs-result" role="status"></p>
-
-        <div class="rs-grid">
-            <div>
-                <h3>Saved Before Photo</h3>
-                <img id="savedBeforePhoto" class="rs-photo" alt="Saved before evidence" hidden>
-            </div>
-            <div>
-                <h3>Saved After Photo</h3>
-                <img id="savedAfterPhoto" class="rs-photo" alt="Saved after evidence" hidden>
-            </div>
-        </div>
-    </section>
-
-    <section class="rs-card">
-        <p class="hero-label">OFFICER ACTION</p>
-        <h2>Status Management</h2>
-        <label class="rs-field" for="issueStatus">Update Issue Status
-            <select id="issueStatus">
-                <option value="Reported">Reported</option>
-                <option value="Assigned">Assigned</option>
-                <option value="Inspection">Inspection</option>
-                <option value="Under Maintenance">Under Maintenance</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Closed">Closed</option>
-            </select>
-        </label>
-        <button type="button" class="primary-button rs-button" id="updateStatusButton">Update Issue Status</button>
-    </section>
-
-    <section class="rs-card">
-        <h3>Important</h3>
-        <p>Before marking an issue Resolved or Closed, upload the after-photo evidence and ensure an authorised officer has physically verified the repair. A visual-difference percentage alone does not prove that a repair is successful.</p>
-    </section>
-</main>
-
-<footer>
-    <div class="footer-logo">RailSafe</div>
-    <p>Railway Maintenance Management System</p>
-    <p>© 2026 RailSafe. Maintenance Operations Portal.</p>
-</footer>
-<script src="script.js"></script>
-</body>
-</html>
+            <div><span>Current Status</span><
