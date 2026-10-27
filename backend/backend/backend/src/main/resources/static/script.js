@@ -515,14 +515,9 @@ function setupMaintenanceForm() {
 
 function setupEvidenceForm() {
     const uploadButton = el("uploadEvidenceButton");
-    const compareButton = el("compareEvidenceButton");
 
     if (uploadButton) {
         uploadButton.addEventListener("click", uploadEvidence);
-    }
-
-    if (compareButton) {
-        compareButton.addEventListener("click", compareEvidence);
     }
 }
 
