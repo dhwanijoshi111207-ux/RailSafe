@@ -583,8 +583,8 @@ async function compareEvidence() {
     }
 
     const formData = new FormData();
-    formData.append("beforePhoto", photos.before);
-    formData.append("afterPhoto", photos.after);
+    formData.append("before", photos.before);
+    formData.append("after", photos.after);
 
     const button = el("compareEvidenceButton");
 
